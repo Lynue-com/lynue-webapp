@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  /* Canvas */
+  --canvas: #ffffff;
+
+  /* Brand — Lynue black/gold */
+  --brand: #111111;
+  --brand-hover: #333333;
+  --gold: #FFE380;
+  --gold-hover: #ffd94d;
+
+  /* Text */
+  --text-primary: #111111;
+  --text-secondary: #7d7d7d;
+  --text-muted: #b0b0b0;
+
+  /* Borders */
+  --border: #e5e5e5;
+  --border-strong: #c0c0c0;
+
+  /* Status */
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #d97706;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-gold: var(--gold);
+  --color-gold-hover: var(--gold-hover);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-space-grotesk);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--text-primary);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Remove number input arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+main > * {
+  animation: fade-in 300ms ease-out both;
+}
