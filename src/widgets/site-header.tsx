@@ -26,9 +26,8 @@ export function SiteHeader() {
   const router = useRouter();
   const meQuery = useMe();
   const logoutMutation = useLogout();
-  const countQuery = useNotificationCount();
-
   const user = meQuery.data;
+  const countQuery = useNotificationCount(!!user);
   const unreadCount = countQuery.data ?? 0;
   const showSearch = !!user || ["/listings", "/rent", "/buy"].includes(pathname);
   const isHomepage = pathname === "/";

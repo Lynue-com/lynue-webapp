@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getNotifications,
   getUnreadNotificationCount,
@@ -16,10 +16,10 @@ export function useNotifications() {
   });
 }
 
-export function useNotificationCount() {
+export function useNotificationCount(enabled = true) {
   return useQuery({
     queryKey: ["notifications-count"],
-    queryFn: getUnreadNotificationCount,
+    queryFn: enabled ? getUnreadNotificationCount : skipToken,
     retry: false,
   });
 }

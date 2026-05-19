@@ -14,10 +14,13 @@ async function silentRefresh(): Promise<boolean> {
   return refreshPromise;
 }
 
+const AUTH_PAGES = ["/signin", "/signup"];
+
 function redirectToSignin() {
-  if (typeof window !== "undefined") {
-    window.location.href = `/signin?next=${encodeURIComponent(window.location.pathname)}`;
-  }
+  if (typeof window === "undefined") return;
+  const current = window.location.pathname;
+  if (AUTH_PAGES.some((p) => current.startsWith(p))) return;
+  window.location.href = `/signin?next=${encodeURIComponent(current)}`;
 }
 
 let browserQueryClient: QueryClient | undefined;
