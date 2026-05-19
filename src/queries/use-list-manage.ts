@@ -8,12 +8,22 @@ import {
   publishListing,
   uploadListingImages,
 } from "@/features/list-manage/api/list-manage-api";
+import { getListingForEdit } from "@/features/list-manage/api/list-edit-api";
 
 export function useCategories() {
   return useQuery({
     queryKey: ["list", "categories"],
     queryFn: getCategories,
     staleTime: 30 * 60_000,
+  });
+}
+
+export function useListingForEdit(id: string) {
+  return useQuery({
+    queryKey: ["list", id, "edit"],
+    queryFn: () => getListingForEdit(id),
+    enabled: !!id,
+    staleTime: 60_000,
   });
 }
 

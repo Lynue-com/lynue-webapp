@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { X, Plus, Loader2, ArrowLeft } from "lucide-react";
 import type { z } from "zod";
-import { useCategories } from "@/queries/use-list-manage";
+import { useCategories, useListingForEdit } from "@/queries/use-list-manage";
 import {
   updateListing,
   uploadListingImagesForEdit,
@@ -670,4 +670,28 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
       </div>
     </div>
   );
+}
+
+// ─── Loader ──────────────────────────────────────────────────────────────────
+
+export function EditListingLoader({ listingId }: { listingId: string }) {
+  const { data: listing, isPending, isError } = useListingForEdit(listingId);
+
+  if (isPending) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-zinc-400" />
+      </div>
+    );
+  }
+
+  if (isError || !listing) {
+    return (
+      <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-zinc-600">
+        Listing not found.
+      </div>
+    );
+  }
+
+  return <EditListingForm listing={listing} />;
 }

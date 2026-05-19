@@ -1,3 +1,4 @@
+"use client";
 import { apiRequest } from "@/shared/lib/http";
 import {
   authResponseSchema,

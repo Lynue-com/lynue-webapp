@@ -1,3 +1,4 @@
+"use client";
 import { z } from "zod";
 import { apiRequest } from "@/shared/lib/http";
 import { listingSchema } from "@/features/listings/model/schemas";
