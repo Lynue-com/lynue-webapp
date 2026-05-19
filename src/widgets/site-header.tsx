@@ -48,7 +48,7 @@ export function SiteHeader() {
   return (
     <>
       {/* Mobile header */}
-      <header className={`fixed left-0 right-0 top-0 z-50 flex h-15 items-center gap-3 border-b border-zinc-200 bg-white px-4 lg:hidden ${isHomepage ? "justify-center" : "justify-between"}`}>
+      <header className={`fixed left-0 right-0 top-0 z-50 flex h-15 items-center gap-3 bg-white px-4 lg:hidden ${isHomepage ? "justify-center" : "justify-between"}`}>
         <Link href="/" className="shrink-0">
           <Image src={LOGO_URL} alt="Lynue" width={90} height={26} className="h-7 w-auto object-contain" priority />
         </Link>
@@ -61,7 +61,7 @@ export function SiteHeader() {
       </header>
 
       {/* Desktop header */}
-      <header className="fixed left-0 right-0 top-0 z-50 hidden h-17.5 items-center justify-between border-b border-zinc-200/80 bg-white/95 px-8 backdrop-blur-lg lg:flex xl:px-26">
+      <header className="fixed left-0 right-0 top-0 z-50 hidden h-17.5 items-center justify-between bg-white/95 px-8 backdrop-blur-lg lg:flex xl:px-26">
         <Link href="/" className="shrink-0">
           <Image src={LOGO_URL} alt="Lynue" width={110} height={30} className="h-8 w-auto object-contain" priority />
         </Link>

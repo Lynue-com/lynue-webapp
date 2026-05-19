@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { siteConfig } from "@/shared/config/site";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Lynue",
+  description: "Learn how Lynue collects, uses, and protects your personal data. We are committed to transparent and secure data practices.",
+  alternates: { canonical: `${siteConfig.url}/privacy-policy` },
+  robots: { index: true, follow: true },
+};
+
 export default function PrivacyPolicyPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8">

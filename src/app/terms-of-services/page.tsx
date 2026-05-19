@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { siteConfig } from "@/shared/config/site";
+
+export const metadata: Metadata = {
+  title: "Terms of Service | Lynue",
+  description: "Read Lynue's terms of service governing use of our property platform, listing standards, and user responsibilities.",
+  alternates: { canonical: `${siteConfig.url}/terms-of-services` },
+  robots: { index: true, follow: true },
+};
+
 export default function TermsOfServicesPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8">

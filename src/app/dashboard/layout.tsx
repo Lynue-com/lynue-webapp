@@ -1,29 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, UserRound, PlusCircle, ListChecks, Bell, MessageSquare, Settings } from "lucide-react";
-import { AuthGuard } from "@/widgets/auth-guard";
+import { usePathname, useRouter } from "next/navigation";
+import { LayoutDashboard, UserRound, PlusCircle, ListChecks, Bell, MessageSquare, Settings, Bookmark, LogOut } from "lucide-react";
+import { toast } from "sonner";
+import { useLogout } from "@/queries/use-auth";
 
 const NAV = [
   { href: "/dashboard",          label: "Overview",    icon: LayoutDashboard, exact: true  },
+  { href: "/dashboard/saved",    label: "Saved",       icon: Bookmark },
   { href: "/dashboard/profile",  label: "Profile",     icon: UserRound },
   { href: "/dashboard/listings", label: "Listings",    icon: ListChecks },
-  { href: "/list/new",           label: "New Listing", icon: PlusCircle },
+  { href: "/list",               label: "New Listing", icon: PlusCircle },
   { href: "/messages",           label: "Messages",    icon: MessageSquare },
   { href: "/notifications",      label: "Alerts",      icon: Bell },
-  { href: "/settings",           label: "Settings",    icon: Settings },
+  { href: "/dashboard/settings", label: "Settings",    icon: Settings },
 ] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const logoutMutation = useLogout();
 
   function active(href: string, exact?: boolean) {
     return exact ? pathname === href : pathname.startsWith(href);
   }
 
+  function handleLogout() {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("Signed out");
+        router.push("/");
+      },
+      onError: (err) => {
+        toast.error(err.message || "Unable to sign out");
+      },
+    });
+  }
+
   return (
-    <AuthGuard>
+    <>
       {/* Mobile: horizontal scrollable tab strip */}
       <nav className="sticky top-0 z-20 flex gap-1 overflow-x-auto border-b border-zinc-100 bg-white px-4 py-2 scrollbar-hide lg:hidden">
         {NAV.map((item) => (
@@ -40,6 +56,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {item.label}
           </Link>
         ))}
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
+          className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-red-500 transition-colors hover:bg-red-50 disabled:opacity-50"
+        >
+          <LogOut size={14} />
+          Logout
+        </button>
       </nav>
 
       {/* Desktop: sidebar + content */}
@@ -66,10 +91,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 );
               })}
             </nav>
+            <div className="mt-2 border-t border-zinc-100 pt-2">
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+                className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-50 disabled:opacity-50"
+              >
+                <LogOut size={15} />
+                {logoutMutation.isPending ? "Signing out…" : "Logout"}
+              </button>
+            </div>
           </div>
         </aside>
         <section className="min-w-0">{children}</section>
       </div>
-    </AuthGuard>
+    </>
   );
 }

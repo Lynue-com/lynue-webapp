@@ -3,11 +3,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/shared/lib/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-full text-sm font-semibold transition disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center rounded-full text-sm font-semibold transition disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30",
   {
     variants: {
       variant: {
-        primary: "bg-[var(--brand)] px-5 py-2.5 text-white hover:bg-[var(--brand-strong)]",
+        primary: "bg-brand px-5 py-2.5 text-white hover:bg-brand-hover",
         secondary: "bg-white px-5 py-2.5 text-zinc-900 ring-1 ring-zinc-200 hover:bg-zinc-50",
         ghost: "px-3 py-2 text-zinc-700 hover:bg-zinc-100",
       },

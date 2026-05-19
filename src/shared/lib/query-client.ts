@@ -1,5 +1,5 @@
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
-import { ApiError } from "@/shared/lib/http";
+import { ApiError } from "@/shared/lib/api-error";
 
 let refreshPromise: Promise<boolean> | null = null;
 
@@ -27,6 +27,9 @@ function createQueryClient() {
     queryCache: new QueryCache({
       onError: async (error, query) => {
         if (!(error instanceof ApiError) || error.status !== 401) return;
+        // The auth/me query returning 401 simply means the user is not logged in.
+        // This is expected on public pages — do not redirect.
+        if (Array.isArray(query.queryKey) && query.queryKey[0] === "auth") return;
         const ok = await silentRefresh();
         if (ok) {
           client.invalidateQueries({ queryKey: query.queryKey });

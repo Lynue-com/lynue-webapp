@@ -9,6 +9,8 @@ import {
   resetPassword,
   signin,
   signup,
+  updateAvatar,
+  updateProfile,
   verifyEmail,
 } from "@/features/auth/api/auth-api";
 
@@ -67,4 +69,24 @@ export function useVerifyEmail() {
 
 export function useResendVerification() {
   return useMutation({ mutationFn: resendVerification });
+}
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateProfile,
+    onSuccess: (updatedUser) => {
+      queryClient.setQueryData(["auth", "me"], updatedUser);
+    },
+  });
+}
+
+export function useUpdateAvatar() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateAvatar,
+    onSuccess: (updatedUser) => {
+      queryClient.setQueryData(["auth", "me"], updatedUser);
+    },
+  });
 }

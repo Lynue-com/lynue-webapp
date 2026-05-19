@@ -1,10 +1,6 @@
 import { apiRequest } from "@/shared/lib/http";
-import {
-  listingDetailResponseSchema,
-  listingsResponseSchema,
-} from "@/features/listings/model/schemas";
+import { listingsResponseSchema } from "@/features/listings/model/schemas";
 import type {
-  Listing,
   ListingsFilters,
   ListingsResponse,
 } from "@/features/listings/model/types";
@@ -43,8 +39,3 @@ export async function getListings(filters: ListingsFilters = {}): Promise<Listin
   return listingsResponseSchema.parse(response);
 }
 
-export async function getListingBySlug(slug: string): Promise<Listing> {
-  const response = await apiRequest<unknown>(`/api/listings/${slug}`);
-  const parsed = listingDetailResponseSchema.parse(response);
-  return parsed.listing;
-}

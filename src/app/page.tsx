@@ -5,6 +5,7 @@ import { siteConfig } from "@/shared/config/site";
 import { HeroSearch } from "@/widgets/hero-search";
 import { FeaturedListings } from "@/widgets/featured-listings";
 import type { Listing } from "@/features/listings/model/types";
+import { serverFetch } from "@/shared/lib/http.server";
 
 export const metadata: Metadata = {
   title: `${siteConfig.name} — Find Your Perfect Property in Nigeria`,
@@ -44,33 +45,55 @@ function ServiceWidget({ imageSrc, title, description, href, linkLabel }: Servic
   );
 }
 
-const BACKEND_URL =
-  process.env.API_PROXY_TARGET ??
-  "https://backend-lynue-18847472647.us-central1.run.app";
-
-async function getListings(type: "RENT" | "SELL"): Promise<Listing[]> {
-  try {
-    const res = await fetch(
-      `${BACKEND_URL}/api/listings?type=${type}&limit=6&sort=newest`,
-      { next: { revalidate: 60 } },
-    );
-    if (!res.ok) return [];
-    const data = (await res.json()) as { listings?: Listing[] };
-    return data.listings ?? [];
-  } catch {
-    return [];
-  }
+async function fetchFeatured(type: "RENT" | "SELL"): Promise<Listing[]> {
+  const data = await serverFetch<{ listings?: Listing[] }>("/api/listings", {
+    query: { type, limit: 6, sort: "newest" },
+    next: { revalidate: 60 },
+  }).catch(() => null);
+  return data?.listings ?? [];
 }
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      description: "Nigeria's modern property platform for rent and sale.",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${siteConfig.url}/listings?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      sameAs: [`https://twitter.com/${siteConfig.twitterHandle.replace("@", "")}`],
+    },
+  ],
+};
 
 export default async function HomePage() {
   const [rentListings, sellListings] = await Promise.all([
-    getListings("RENT"),
-    getListings("SELL"),
+    fetchFeatured("RENT"),
+    fetchFeatured("SELL"),
   ]);
   const allListings = [...rentListings, ...sellListings];
 
   return (
     <div className="bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       {/* Hero */}
       <div className="relative mx-4 mb-10 h-[85vh] min-h-130 overflow-hidden rounded-3xl sm:mx-6 md:rounded-4xl lg:mx-8">
         <Image

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const protectedPrefixes = ["/dashboard", "/list"];
 const authPages = ["/signin", "/signup"];
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("access_token")?.value;
   const isProtected = protectedPrefixes.some((prefix) => pathname.startsWith(prefix));

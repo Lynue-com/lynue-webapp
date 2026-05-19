@@ -1,3 +1,5 @@
+import "client-only";
+
 type Primitive = string | number | boolean;
 type QueryValue = Primitive | null | undefined;
 
@@ -21,15 +23,8 @@ function buildUrl(path: string, query?: Record<string, QueryValue>): string {
   return qs ? `${path}?${qs}` : path;
 }
 
-export class ApiError extends Error {
-  public readonly status: number;
-
-  public constructor(message: string, status: number) {
-    super(message);
-    this.name = "ApiError";
-    this.status = status;
-  }
-}
+export { ApiError } from "./api-error";
+import { ApiError } from "./api-error";
 
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { query, json, body, headers, ...rest } = options;

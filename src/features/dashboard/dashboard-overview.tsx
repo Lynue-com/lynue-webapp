@@ -1,12 +1,57 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus, Wallet, House, Building2 } from "lucide-react";
+import { ArrowRight, Plus, Wallet, House, Building2, X, TriangleAlert, RefreshCcw } from "lucide-react";
+import { toast } from "sonner";
 import { useMyListings } from "@/queries/use-dashboard";
-import { useMe } from "@/queries/use-auth";
+import { useMe, useResendVerification } from "@/queries/use-auth";
 import { compactNumber } from "@/shared/lib/format";
 import { Button } from "@/shared/ui/button";
 import { ListingCard } from "@/shared/ui/listing-card";
+
+function EmailVerifyBanner({ email }: { email: string }) {
+  const [dismissed, setDismissed] = useState(false);
+  const resend = useResendVerification();
+
+  if (dismissed) return null;
+
+  function handleResend() {
+    resend.mutate(email, {
+      onSuccess: () => toast.success("Verification email sent — check your inbox"),
+      onError: (err) => toast.error(err.message || "Unable to send verification email"),
+    });
+  }
+
+  return (
+    <div className="relative flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+      <TriangleAlert size={18} className="mt-0.5 shrink-0 text-amber-500" />
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-amber-900">Verify your email address</p>
+        <p className="mt-0.5 text-sm text-amber-700">
+          We sent a verification link to <span className="font-medium">{email}</span>. Please verify your email to unlock all features.
+        </p>
+        <button
+          type="button"
+          onClick={handleResend}
+          disabled={resend.isPending || resend.isSuccess}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-white px-4 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100 disabled:opacity-50"
+        >
+          <RefreshCcw size={12} />
+          {resend.isPending ? "Sending…" : resend.isSuccess ? "Email sent!" : "Resend verification email"}
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={() => setDismissed(true)}
+        className="shrink-0 rounded-lg p-1 text-amber-500 hover:bg-amber-100"
+        aria-label="Dismiss"
+      >
+        <X size={15} />
+      </button>
+    </div>
+  );
+}
 
 export function DashboardOverview() {
   const userQuery = useMe();
@@ -19,9 +64,13 @@ export function DashboardOverview() {
 
   return (
     <div className="space-y-7">
+      {userQuery.data?.emailVerified === false && userQuery.data.email ? (
+        <EmailVerifyBanner email={userQuery.data.email} />
+      ) : null}
+
       <header className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-7">
         <div className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-[#FFE380]/45 blur-2xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-20 w-full bg-gradient-to-r from-zinc-900/[0.03] via-zinc-900/[0.01] to-transparent" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-20 w-full bg-linear-to-r from-zinc-900/3 via-zinc-900/1 to-transparent" />
 
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Dashboard</p>
         <h1 className="mt-2 text-3xl font-black tracking-tight text-zinc-900 sm:text-4xl">Welcome back, {welcomeName}</h1>
@@ -30,7 +79,7 @@ export function DashboardOverview() {
         </p>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <Link href="/list/new">
+          <Link href="/list">
             <Button className="gap-2 rounded-full px-5">
               <Plus size={15} />
               Create Listing

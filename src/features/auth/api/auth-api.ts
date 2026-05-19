@@ -79,3 +79,29 @@ export async function resendVerification(email: string) {
   });
   return genericStatusSchema.parse(response);
 }
+
+export async function updateProfile(data: {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  profileTitle?: string;
+  description?: string;
+  city?: string;
+  state?: string;
+}) {
+  const response = await apiRequest<unknown>("/api/users/me", {
+    method: "PATCH",
+    json: data,
+  });
+  return meResponseSchema.parse(response).user;
+}
+
+export async function updateAvatar(file: File) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+  const response = await apiRequest<unknown>("/api/users/me/avatar", {
+    method: "POST",
+    body: formData,
+  });
+  return meResponseSchema.parse(response).user;
+}

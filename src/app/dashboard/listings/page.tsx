@@ -22,7 +22,7 @@ export default function DashboardListingsPage() {
           <h1 className="text-2xl font-black text-zinc-900">Manage Listings</h1>
           <p className="mt-1 text-sm text-zinc-500">Edit, publish, or remove listings from your portfolio.</p>
         </div>
-        <Link href="/list/new">
+        <Link href="/list">
           <Button className="gap-2 rounded-full">
             <Plus size={14} />
             New Listing
@@ -37,7 +37,7 @@ export default function DashboardListingsPage() {
       {listings.length === 0 && !listingsQuery.isLoading ? (
         <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-10 text-center shadow-sm">
           <p className="text-sm text-zinc-500">No listings found.</p>
-          <Link href="/list/new" className="mt-4 inline-flex text-sm font-medium text-zinc-900 hover:underline">
+          <Link href="/list" className="mt-4 inline-flex text-sm font-medium text-zinc-900 hover:underline">
             Create your first listing
           </Link>
         </div>

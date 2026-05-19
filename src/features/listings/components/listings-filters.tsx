@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { SlidersHorizontal, X, ChevronDown, Grid3X3, List, Map, Search } from "lucide-react";
+import { SlidersHorizontal, X, ChevronDown, Grid3X3, List, Search } from "lucide-react";
 import type { ListingsFilters } from "@/features/listings/model/types";
 
 // ── Constants ──────────────────────────────────────────────────────────────
@@ -69,12 +69,6 @@ export type SortRowProps = {
 export type MobileSortRowProps = {
   sort: SortValue;
   onSortChange: (sort: SortValue) => void;
-};
-
-export type MobileViewToggleProps = {
-  viewMode: ViewMode;
-  onViewModeChange: (mode: ViewMode) => void;
-  hidden?: boolean;
 };
 
 // ── Update helper (exactOptionalPropertyTypes-safe) ────────────────────────
@@ -1027,29 +1021,6 @@ export function MobileSortRow({ sort, onSortChange }: MobileSortRowProps) {
           </option>
         ))}
       </select>
-    </div>
-  );
-}
-
-// ── Floating mobile view toggle ────────────────────────────────────────────
-
-export function MobileViewToggle({ viewMode, onViewModeChange, hidden }: MobileViewToggleProps) {
-  if (hidden) return null;
-
-  const modes: ViewMode[] = ["grid", "list", "map"];
-  const next = modes[(modes.indexOf(viewMode) + 1) % modes.length] ?? "grid";
-  const Icon = viewMode === "grid" ? List : viewMode === "list" ? Map : Grid3X3;
-  const label = viewMode === "grid" ? "List View" : viewMode === "list" ? "Map" : "Grid";
-
-  return (
-    <div className="fixed bottom-20 left-1/2 z-40 -translate-x-1/2 md:hidden">
-      <button
-        type="button"
-        onClick={() => onViewModeChange(next)}
-        className="flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white shadow-lg transition-transform active:scale-95"
-      >
-        <Icon size={16} /> {label}
-      </button>
     </div>
   );
 }
