@@ -33,6 +33,13 @@ function createQueryClient() {
         // The auth/me query returning 401 simply means the user is not logged in.
         // This is expected on public pages — do not redirect.
         if (Array.isArray(query.queryKey) && query.queryKey[0] === "auth") return;
+        // If auth/me has already failed with 401, the user is definitively not
+        // logged in — no token to refresh, no redirect needed.
+        // If auth/me hasn't settled yet (pending/undefined), also skip: the
+        // middleware already guards protected routes server-side.
+        const meState = client.getQueryState(["auth", "me"]);
+        const userIsLoggedIn = meState?.status === "success" && !!meState.data;
+        if (!userIsLoggedIn) return;
         const ok = await silentRefresh();
         if (ok) {
           client.invalidateQueries({ queryKey: query.queryKey });
