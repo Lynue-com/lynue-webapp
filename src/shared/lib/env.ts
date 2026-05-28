@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().optional(),
-  NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: z.string().default("DEMO_MAP_ID"),
+  NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse({
