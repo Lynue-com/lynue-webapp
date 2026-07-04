@@ -85,7 +85,7 @@ export function MapView({ listings, hoveredListingId }: MapViewProps) {
       <Map
         defaultCenter={{ lat: first.latitude as number, lng: first.longitude as number }}
         defaultZoom={11}
-        mapId={env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID}
+        mapId={env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? null}
         className="h-full w-full"
         gestureHandling="greedy"
       >
