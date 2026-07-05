@@ -6,6 +6,7 @@ import {
   deleteListing,
   getCategories,
   publishListing,
+  unpublishListing,
   uploadListingImages,
 } from "@/features/list-manage/api/list-manage-api";
 import { getListingForEdit } from "@/features/list-manage/api/list-edit-api";
@@ -54,6 +55,18 @@ export function usePublishListing() {
 
   return useMutation({
     mutationFn: publishListing,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["dashboard", "my-listings"] });
+      await queryClient.invalidateQueries({ queryKey: ["listings"] });
+    },
+  });
+}
+
+export function useUnpublishListing() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: unpublishListing,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["dashboard", "my-listings"] });
       await queryClient.invalidateQueries({ queryKey: ["listings"] });

@@ -44,6 +44,7 @@ export const listingSchema = z
     buildingSize: decimalField,
     createdAt: z.string(),
     images: z.array(listingImageSchema).default([]),
+    status: z.enum(["DRAFT", "PUBLISHED", "SOLD", "RENTED", "ARCHIVED"]).optional(),
     user: listingUserSchema.optional(),
   })
   .passthrough();

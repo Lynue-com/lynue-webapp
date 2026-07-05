@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { apiRequest } from "@/shared/lib/http";
 import {
   categoriesResponseSchema,
@@ -5,6 +6,12 @@ import {
   listingCreateResponseSchema,
   listingDeleteResponseSchema,
 } from "@/features/list-manage/model/schemas";
+import { listingSchema } from "@/features/listings/model/schemas";
+
+const listingSingleResponseSchema = z.object({
+  status: z.boolean(),
+  listing: listingSchema,
+});
 
 export async function getCategories() {
   const response = await apiRequest<unknown>("/api/list/categories", {
@@ -37,6 +44,15 @@ export async function publishListing(id: string) {
     credentials: "include",
   });
   return listingCreateResponseSchema.parse(response).listing;
+}
+
+export async function unpublishListing(id: string) {
+  const response = await apiRequest<unknown>(`/api/list/${id}`, {
+    method: "PATCH",
+    json: { status: "DRAFT" },
+    credentials: "include",
+  });
+  return listingSingleResponseSchema.parse(response).listing;
 }
 
 export async function uploadListingImages(id: string, files: File[]) {
