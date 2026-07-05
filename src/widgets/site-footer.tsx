@@ -97,7 +97,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-800 pt-8 sm:flex-row">
           <p className="text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} Lynue Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Lynue Inc. 2026 All rights reserved.
           </p>
           <a href="mailto:info@lynue.com" className="text-xs text-zinc-500 hover:text-white">
             info@lynue.com
