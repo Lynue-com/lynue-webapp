@@ -36,7 +36,7 @@ export function SiteFooter() {
           <div className="col-span-2 sm:col-span-1">
             <p className="text-xl font-black text-white">Lynue</p>
             <p className="mt-2 text-xs leading-5 text-zinc-400">
-              Nigeria&apos;s most complete property platform for rent and sale.
+              Nigeria&apos;s trusted property platform for rent and sale.
             </p>
             <div className="mt-5 flex items-center gap-3">
               {socials.map(({ label, href }) => (
