@@ -9,14 +9,39 @@ type ServerEnv = z.infer<typeof schema>;
 
 let _cached: ServerEnv | null = null;
 
+function resolveServerApiUrl(): string | undefined {
+  const explicitApiUrl = process.env.API_URL?.trim();
+  if (explicitApiUrl) return explicitApiUrl;
+
+  const publicApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  const publicAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+
+  if (publicApiUrl && /^https?:\/\//i.test(publicApiUrl)) {
+    return publicApiUrl;
+  }
+
+  if (publicAppUrl) {
+    if (publicApiUrl && publicApiUrl.startsWith("/")) {
+      return new URL(publicApiUrl, publicAppUrl).toString();
+    }
+    return new URL("/api", publicAppUrl).toString();
+  }
+
+  return undefined;
+}
+
 function getEnv(): ServerEnv {
   if (_cached) return _cached;
-  const parsed = schema.safeParse({ API_URL: process.env.API_URL });
+
+  const apiUrl = resolveServerApiUrl();
+  const parsed = schema.safeParse({ API_URL: apiUrl });
+
   if (!parsed.success) {
     throw new Error(
       `Invalid server environment variables:\n${JSON.stringify(parsed.error.flatten().fieldErrors, null, 2)}`,
     );
   }
+
   _cached = parsed.data;
   return _cached;
 }
