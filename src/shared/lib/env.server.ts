@@ -14,7 +14,8 @@ function resolveServerApiUrl(): string | undefined {
   if (explicitApiUrl) return explicitApiUrl;
 
   const publicApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-  const publicAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const publicAppUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? process.env.NEXT_PUBLIC_APP_URL?.trim();
 
   if (publicApiUrl && /^https?:\/\//i.test(publicApiUrl)) {
     return publicApiUrl;

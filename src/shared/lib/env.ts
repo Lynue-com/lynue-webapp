@@ -6,8 +6,11 @@ const envSchema = z.object({
   NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: z.string().optional(),
 });
 
+const rawAppUrl =
+  process.env.NEXT_PUBLIC_APP_URL?.trim() ?? process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
 const parsed = envSchema.safeParse({
-  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL?.trim(),
+  NEXT_PUBLIC_APP_URL: rawAppUrl,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
   NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
 });
