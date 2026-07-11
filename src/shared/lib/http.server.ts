@@ -18,9 +18,8 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 };
 
 function buildUrl(path: string, query?: Record<string, QueryValue>): string {
-  const normalizedBase = serverEnv.API_URL.replace(/\/+$/, "");
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(normalizedPath, `${normalizedBase}/`);
+  const url = new URL(`/api${normalizedPath}`, "http://localhost");
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value !== null && value !== undefined && value !== "") {
@@ -28,7 +27,7 @@ function buildUrl(path: string, query?: Record<string, QueryValue>): string {
       }
     }
   }
-  return url.toString();
+  return `${url.pathname}${url.search}`;
 }
 
 export async function serverFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
