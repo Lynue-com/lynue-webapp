@@ -18,8 +18,12 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 };
 
 function buildUrl(path: string, query?: Record<string, QueryValue>): string {
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(`/api${normalizedPath}`, "http://localhost");
+  let normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  if (!normalizedPath.startsWith("/api")) {
+    normalizedPath = `/api${normalizedPath}`;
+  }
+
+  const url = new URL(normalizedPath, "http://localhost");
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value !== null && value !== undefined && value !== "") {
