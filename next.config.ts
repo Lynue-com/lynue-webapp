@@ -11,12 +11,7 @@ const backendUrl = (() => {
     return publicApiUrl.replace(/\/+$/, "");
   }
 
-  // Default to production backend for Cloud Run builds
-  if (process.env.NODE_ENV === "production") {
-    return "https://api.lynue.com";
-  }
-
-  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided for development builds.");
+  throw new Error("API_URL or NEXT_PUBLIC_API_URL must be provided. Set it in environment variables or Cloud Run secrets.");
 })();
 
 const nextConfig: NextConfig = {
