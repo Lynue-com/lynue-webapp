@@ -9,7 +9,7 @@ type ServerEnv = z.infer<typeof schema>;
 
 let _cached: ServerEnv | null = null;
 
-function resolveServerApiUrl(): string | undefined {
+function resolveServerApiUrl(): string {
   const explicitApiUrl = process.env.API_URL?.trim();
   if (explicitApiUrl) return explicitApiUrl;
 
@@ -18,7 +18,7 @@ function resolveServerApiUrl(): string | undefined {
     return publicApiUrl;
   }
 
-  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided for server-side requests.");
+  throw new Error("API_URL or NEXT_PUBLIC_API_URL must be provided for server-side requests.");
 }
 
 function getEnv(): ServerEnv {
