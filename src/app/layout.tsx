@@ -47,6 +47,11 @@ const organizationJsonLd = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: ["/favicon.svg"],
+    apple: ["/favicon.svg"],
+  },
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
