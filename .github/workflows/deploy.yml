@@ -23,7 +23,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Export deploy envs from Google Secret Manager
+      - name: Deploy to Cloud Run
         run: |
           API_URL=$(gcloud secrets versions access latest --secret="API_URL" --project="${PROJECT_ID}")
           NEXT_PUBLIC_API_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_API_URL" --project="${PROJECT_ID}")
@@ -44,14 +44,7 @@ jobs:
           fi
 
           echo "Required deploy env vars are present."
-          echo "API_URL=$API_URL" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID" >> $GITHUB_ENV
 
-      - name: Deploy to Cloud Run
-        run: |
           gcloud run deploy ${{ env.SERVICE }} \
             --source . \
             --platform managed \
