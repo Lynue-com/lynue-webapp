@@ -18,10 +18,22 @@ function getUrl(path: string, query: URLSearchParams) {
   return url;
 }
 
+function sanitizeHeaders(headers: Headers) {
+  const out = new Headers();
+  for (const [key, value] of headers.entries()) {
+    const lower = key.toLowerCase();
+    if (lower === "host" || lower === "content-length" || lower === "transfer-encoding") {
+      continue;
+    }
+    out.set(key, value);
+  }
+  return out;
+}
+
 export async function GET(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
   const url = getUrl(path.join("/"), req.nextUrl.searchParams);
-  const response = await fetch(url.toString(), { headers: req.headers });
+  const response = await fetch(url.toString(), { headers: sanitizeHeaders(req.headers) });
   const body = await response.arrayBuffer();
   return new NextResponse(body, {
     status: response.status,
@@ -34,7 +46,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ pat
   const url = getUrl(path.join("/"), req.nextUrl.searchParams);
   const response = await fetch(url.toString(), {
     method: "POST",
-    headers: req.headers,
+    headers: sanitizeHeaders(req.headers),
     body: await req.arrayBuffer(),
   });
   const body = await response.arrayBuffer();
@@ -49,7 +61,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ path
   const url = getUrl(path.join("/"), req.nextUrl.searchParams);
   const response = await fetch(url.toString(), {
     method: "PUT",
-    headers: req.headers,
+    headers: sanitizeHeaders(req.headers),
     body: await req.arrayBuffer(),
   });
   const body = await response.arrayBuffer();
@@ -64,7 +76,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ p
   const url = getUrl(path.join("/"), req.nextUrl.searchParams);
   const response = await fetch(url.toString(), {
     method: "DELETE",
-    headers: req.headers,
+    headers: sanitizeHeaders(req.headers),
   });
   const body = await response.arrayBuffer();
   return new NextResponse(body, {
