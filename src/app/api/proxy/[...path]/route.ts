@@ -1,14 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-const backendUrl = process.env.API_URL?.trim() || process.env.NEXT_PUBLIC_API_URL?.trim();
-
-if (!backendUrl) {
-  throw new Error("API_URL or NEXT_PUBLIC_API_URL must be set for API proxying.");
+function getBackendUrl(): string {
+  const backendUrl = process.env.API_URL?.trim() || process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!backendUrl) {
+    throw new Error("API_URL or NEXT_PUBLIC_API_URL must be set for API proxying.");
+  }
+  return backendUrl.replace(/\/+$/, "");
 }
 
-const backendBase = backendUrl.replace(/\/+$/, "");
-
 function getUrl(path: string, query: URLSearchParams) {
+  const backendBase = getBackendUrl();
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   const url = new URL(`${backendBase}${normalizedPath}`);
   for (const [key, value] of query.entries()) {
