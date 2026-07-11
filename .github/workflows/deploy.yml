@@ -12,6 +12,7 @@ jobs:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       REGION: ${{ secrets.GCP_REGION }}
       SERVICE: ${{ secrets.CLOUD_RUN_SERVICE }}
+      IMAGE_NAME: europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-source-deploy/lynue-webapp/lynue-webapp
 
     steps:
       - name: Checkout
@@ -26,4 +27,5 @@ jobs:
       - name: Deploy to Cloud Run via Cloud Build
         run: |
           gcloud config set project "${PROJECT_ID}"
-          gcloud builds submit --config cloudbuild.yaml .
+          gcloud builds submit --config cloudbuild.yaml . \
+            --substitutions=_SERVICE_NAME="${SERVICE}",_REGION="${REGION}",_IMAGE_NAME="${IMAGE_NAME}"
