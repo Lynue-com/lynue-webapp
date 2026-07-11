@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { siteConfig } from "@/shared/config/site";
 import { ListingsExplorer } from "@/features/listings/components/listings-explorer";
+import { buildPageMetadata } from "@/shared/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Browse Properties for Rent & Sale in Nigeria | Lynue",
   description:
     "Explore verified apartments, houses, and land for rent or sale across Lagos, Abuja, and all of Nigeria. Filter by price, location, and type.",
-  alternates: { canonical: `${siteConfig.url}/listings` },
-  openGraph: {
-    title: "Browse Properties for Rent & Sale in Nigeria | Lynue",
-    description: "Explore verified property listings across Nigeria.",
-    url: `${siteConfig.url}/listings`,
-  },
-};
+  path: "/listings",
+  keywords: ["property listings Nigeria", "rent and sale homes", "verified houses Nigeria"],
+});
 
 export default function ListingsPage() {
   return (
