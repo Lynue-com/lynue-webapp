@@ -11,7 +11,12 @@ const backendUrl = (() => {
     return publicApiUrl.replace(/\/+$/, "");
   }
 
-  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided for the Next.js rewrite target.");
+  // Default to production backend for Cloud Run builds
+  if (process.env.NODE_ENV === "production") {
+    return "https://api.lynue.com";
+  }
+
+  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided for development builds.");
 })();
 
 const nextConfig: NextConfig = {
