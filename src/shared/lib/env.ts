@@ -1,14 +1,13 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NEXT_PUBLIC_APP_URL: z.string().url().default("https://lynue.com"),
+  NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().optional(),
   NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: z.string().optional(),
-  NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().default("G-QSVX8TXP6C"),
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string(),
 });
 
-const rawAppUrl =
-  process.env.NEXT_PUBLIC_APP_URL?.trim() ?? process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
 
 const parsed = envSchema.safeParse({
   NEXT_PUBLIC_APP_URL: rawAppUrl,

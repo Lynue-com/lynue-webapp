@@ -13,19 +13,7 @@ function resolveServerApiUrl(): string {
   const explicitApiUrl = process.env.API_URL?.trim();
   if (explicitApiUrl) return explicitApiUrl;
 
-  const publicApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-  if (publicApiUrl) {
-    if (/^https?:\/\//i.test(publicApiUrl)) {
-      return publicApiUrl;
-    }
-
-    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? process.env.NEXT_PUBLIC_SITE_URL?.trim();
-    if (frontendUrl && /^https?:\/\//i.test(frontendUrl)) {
-      return `${frontendUrl.replace(/\/+$/, "")}${publicApiUrl.startsWith("/") ? publicApiUrl : `/${publicApiUrl}`}`;
-    }
-  }
-
-  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL or NEXT_PUBLIC_APP_URL must be provided for server-side requests.");
+  throw new Error("API_URL must be provided for server-side requests.");
 }
 
 function getEnv(): ServerEnv {
