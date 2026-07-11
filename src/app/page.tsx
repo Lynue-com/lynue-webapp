@@ -111,7 +111,7 @@ export default async function HomePage() {
             Find your <span className="text-[#FFE380]">dream home</span>
           </h1>
           <p className="mx-auto mb-10 mt-4 max-w-md text-base text-zinc-200">
-            Escape the ordinary. Dive into personalized homes tailored to your every desire.
+            Escape the ordinary. Dive into personalized homes tailored to your every desire
           </p>
           <HeroSearch />
         </div>
