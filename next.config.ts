@@ -11,7 +11,7 @@ const backendUrl = (() => {
     return publicApiUrl.replace(/\/+$/, "");
   }
 
-  throw new Error("API_URL or NEXT_PUBLIC_API_URL must be provided. Set it in environment variables or Cloud Run secrets.");
+  return "https://backend-lynue-18847472647.us-central1.run.app";
 })();
 
 const nextConfig: NextConfig = {
