@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useReducer, useState } from "react";
 import { Camera, LockKeyhole } from "lucide-react";
 import { toast } from "sonner";
 import { useMe, useUpdateAvatar, useUpdateProfile } from "@/queries/use-auth";
@@ -17,15 +17,32 @@ function PersonalDetailsSection() {
   const updateAvatar = useUpdateAvatar();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [profile, dispatch] = useReducer(
+    (state: { firstName: string; lastName: string; phoneNumber: string }, action: { type: "initialize"; payload: { firstName: string; lastName: string; phoneNumber: string } }) => {
+      switch (action.type) {
+        case "initialize":
+          return action.payload;
+        default:
+          return state;
+      }
+    },
+    {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+    },
+  );
 
   useEffect(() => {
     if (!user) return;
-    setFirstName(user.firstName ?? "");
-    setLastName(user.lastName ?? "");
-    setPhoneNumber(user.phoneNumber ?? "");
+    dispatch({
+      type: "initialize",
+      payload: {
+        firstName: user.firstName ?? "",
+        lastName: user.lastName ?? "",
+        phoneNumber: user.phoneNumber ?? "",
+      },
+    });
   }, [user]);
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -41,7 +58,7 @@ function PersonalDetailsSection() {
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
     updateProfile.mutate(
-      { firstName: firstName.trim(), lastName: lastName.trim(), phoneNumber: phoneNumber.trim() },
+      { firstName: profile.firstName.trim(), lastName: profile.lastName.trim(), phoneNumber: profile.phoneNumber.trim() },
       {
         onSuccess: () => toast.success("Profile updated"),
         onError: (err) => toast.error(err.message || "Failed to update profile"),
@@ -94,8 +111,8 @@ function PersonalDetailsSection() {
           <div>
             <label className="mb-1.5 block text-sm font-medium text-zinc-700">First Name</label>
             <Input
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={profile.firstName}
+              onChange={(e) => dispatch({ type: "initialize", payload: { ...profile, firstName: e.target.value } })}
               placeholder="First name"
               autoComplete="given-name"
             />
@@ -103,8 +120,8 @@ function PersonalDetailsSection() {
           <div>
             <label className="mb-1.5 block text-sm font-medium text-zinc-700">Last Name</label>
             <Input
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={profile.lastName}
+              onChange={(e) => dispatch({ type: "initialize", payload: { ...profile, lastName: e.target.value } })}
               placeholder="Last name"
               autoComplete="family-name"
             />
@@ -120,8 +137,8 @@ function PersonalDetailsSection() {
           <div>
             <label className="mb-1.5 block text-sm font-medium text-zinc-700">Phone Number</label>
             <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={profile.phoneNumber}
+              onChange={(e) => dispatch({ type: "initialize", payload: { ...profile, phoneNumber: e.target.value } })}
               placeholder="Enter your phone number"
               type="tel"
               autoComplete="tel"

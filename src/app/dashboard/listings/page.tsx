@@ -7,7 +7,6 @@ import { useMyListings } from "@/queries/use-dashboard";
 import { useDeleteListing, usePublishListing, useUnpublishListing } from "@/queries/use-list-manage";
 import { Button } from "@/shared/ui/button";
 import { ListingCard } from "@/shared/ui/listing-card";
-import { formatCurrency } from "@/shared/lib/format";
 
 export default function DashboardListingsPage() {
   const listingsQuery = useMyListings();

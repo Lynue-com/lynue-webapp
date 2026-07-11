@@ -18,7 +18,7 @@ const backendUrl = (() => {
     }
   }
 
-  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided.");
+  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL or absolute NEXT_PUBLIC_APP_URL with relative NEXT_PUBLIC_API_URL must be provided.");
 })();
 
 const nextConfig: NextConfig = {

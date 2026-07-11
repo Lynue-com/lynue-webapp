@@ -7,10 +7,9 @@ const LOGO_URL =
   "https://storage.googleapis.com/lynue-public-assets/lynue%20logo/lynue.com_logo_word.avif";
 
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Bell, MessageCircle } from "lucide-react";
-import { toast } from "sonner";
-import { useLogout, useMe } from "@/queries/use-auth";
+import { useMe } from "@/queries/use-auth";
 import { useNotificationCount } from "@/queries/use-notifications";
 import { ProfileAvatar } from "@/shared/ui/profile-avatar";
 import { SearchBar } from "@/shared/ui/search-bar";
@@ -23,26 +22,12 @@ const primaryNav = [
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const router = useRouter();
   const meQuery = useMe();
-  const logoutMutation = useLogout();
   const user = meQuery.data;
   const countQuery = useNotificationCount(!!user);
   const unreadCount = countQuery.data ?? 0;
   const showSearch = !!user || ["/listings", "/rent", "/buy"].includes(pathname);
   const isHomepage = pathname === "/";
-
-  function handleLogout() {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        toast.success("Signed out");
-        router.push("/");
-      },
-      onError: (err) => {
-        toast.error(err.message || "Unable to sign out");
-      },
-    });
-  }
 
   return (
     <>

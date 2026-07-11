@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { siteConfig } from "@/shared/config/site";
 import { ListingsExplorer } from "@/features/listings/components/listings-explorer";
 import { buildPageMetadata } from "@/shared/lib/seo";
 
