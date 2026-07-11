@@ -18,7 +18,7 @@ const backendUrl = (() => {
     }
   }
 
-  return "https://backend-lynue-18847472647.us-central1.run.app";
+  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided.");
 })();
 
 const nextConfig: NextConfig = {
