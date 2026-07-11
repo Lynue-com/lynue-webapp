@@ -1,0 +1,26 @@
+# .gcloudignore files are like .gitignore files, except blank lines and lines starting
+# with '#' are ignored.
+
+node_modules/
+.next/
+.git/
+.github/
+.env.local
+.env*.local
+coverage/
+dist/
+build/
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+vitest.config.ts
+tsconfig.tsbuildinfo
+.prettierrc
+.prettierignore
+eslint.config.mjs
+README.md
+.gitignore
+.env.example

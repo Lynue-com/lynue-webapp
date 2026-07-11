@@ -1,0 +1,74 @@
+steps:
+  # Build the Docker image with environment variables
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "${_IMAGE_NAME}:${COMMIT_SHA}"
+      - "-t"
+      - "${_IMAGE_NAME}:latest"
+      - "--build-arg"
+      - "API_URL=$$API_URL"
+      - "--build-arg"
+      - "NEXT_PUBLIC_API_URL=$$NEXT_PUBLIC_API_URL"
+      - "--build-arg"
+      - "NEXT_PUBLIC_APP_URL=$$NEXT_PUBLIC_APP_URL"
+      - "--build-arg"
+      - "NEXT_PUBLIC_SITE_URL=$$NEXT_PUBLIC_SITE_URL"
+      - "--build-arg"
+      - "NEXT_PUBLIC_GA_MEASUREMENT_ID=$$NEXT_PUBLIC_GA_MEASUREMENT_ID"
+      - "."
+    secretEnv:
+      - "API_URL"
+      - "NEXT_PUBLIC_API_URL"
+      - "NEXT_PUBLIC_APP_URL"
+      - "NEXT_PUBLIC_SITE_URL"
+      - "NEXT_PUBLIC_GA_MEASUREMENT_ID"
+
+  # Push to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "--all-tags", "${_IMAGE_NAME}"]
+
+  # Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image ${_IMAGE_NAME}:${COMMIT_SHA} \
+          --region ${_REGION} \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 3000 \
+          --set-env-vars "NEXT_PUBLIC_API_URL=$$NEXT_PUBLIC_API_URL,NEXT_PUBLIC_APP_URL=$$NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_SITE_URL=$$NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_MEASUREMENT_ID=$$NEXT_PUBLIC_GA_MEASUREMENT_ID"
+    secretEnv:
+      - "NEXT_PUBLIC_API_URL"
+      - "NEXT_PUBLIC_APP_URL"
+      - "NEXT_PUBLIC_SITE_URL"
+      - "NEXT_PUBLIC_GA_MEASUREMENT_ID"
+
+images:
+  - "${_IMAGE_NAME}:${COMMIT_SHA}"
+  - "${_IMAGE_NAME}:latest"
+
+substitutions:
+  _SERVICE_NAME: lynue-webapp
+  _REGION: europe-west1
+  _IMAGE_NAME: europe-west1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/lynue-webapp/lynue-webapp
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/API_URL/versions/latest
+      env: "API_URL"
+    - versionName: projects/${PROJECT_ID}/secrets/NEXT_PUBLIC_API_URL/versions/latest
+      env: "NEXT_PUBLIC_API_URL"
+    - versionName: projects/${PROJECT_ID}/secrets/NEXT_PUBLIC_APP_URL/versions/latest
+      env: "NEXT_PUBLIC_APP_URL"
+    - versionName: projects/${PROJECT_ID}/secrets/NEXT_PUBLIC_SITE_URL/versions/latest
+      env: "NEXT_PUBLIC_SITE_URL"
+    - versionName: projects/${PROJECT_ID}/secrets/NEXT_PUBLIC_GA_MEASUREMENT_ID/versions/latest
+      env: "NEXT_PUBLIC_GA_MEASUREMENT_ID"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
