@@ -18,7 +18,9 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 };
 
 function buildUrl(path: string, query?: Record<string, QueryValue>): string {
-  const url = new URL(path, serverEnv.API_URL);
+  const normalizedBase = serverEnv.API_URL.replace(/\/+$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const url = new URL(normalizedPath, `${normalizedBase}/`);
   if (query) {
     for (const [key, value] of Object.entries(query)) {
       if (value !== null && value !== undefined && value !== "") {
