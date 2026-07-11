@@ -7,8 +7,15 @@ const backendUrl = (() => {
   }
 
   const publicApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-  if (publicApiUrl && /^https?:\/\//i.test(publicApiUrl)) {
-    return publicApiUrl.replace(/\/+$/, "");
+  if (publicApiUrl) {
+    if (/^https?:\/\//i.test(publicApiUrl)) {
+      return publicApiUrl.replace(/\/+$/, "");
+    }
+
+    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL?.trim() ?? process.env.NEXT_PUBLIC_SITE_URL?.trim();
+    if (frontendUrl && /^https?:\/\//i.test(frontendUrl)) {
+      return `${frontendUrl.replace(/\/+$/, "")}${publicApiUrl.startsWith("/") ? publicApiUrl : `/${publicApiUrl}`}`;
+    }
   }
 
   return "https://backend-lynue-18847472647.us-central1.run.app";
