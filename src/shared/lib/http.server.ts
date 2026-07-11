@@ -1,6 +1,5 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { serverEnv } from "./env.server";
 
 export class ApiError extends Error {
   public readonly status: number;
