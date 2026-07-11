@@ -41,18 +41,13 @@ steps:
           --platform managed \
           --allow-unauthenticated \
           --port 3000 \
-          --set-env-vars "NEXT_PUBLIC_API_URL=$$NEXT_PUBLIC_API_URL,NEXT_PUBLIC_APP_URL=$$NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_SITE_URL=$$NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_MEASUREMENT_ID=$$NEXT_PUBLIC_GA_MEASUREMENT_ID"
+          --set-env-vars "API_URL=$$API_URL,NEXT_PUBLIC_API_URL=$$NEXT_PUBLIC_API_URL,NEXT_PUBLIC_APP_URL=$$NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_SITE_URL=$$NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_MEASUREMENT_ID=$$NEXT_PUBLIC_GA_MEASUREMENT_ID"
     secretEnv:
+      - "API_URL"
       - "NEXT_PUBLIC_API_URL"
       - "NEXT_PUBLIC_APP_URL"
       - "NEXT_PUBLIC_SITE_URL"
       - "NEXT_PUBLIC_GA_MEASUREMENT_ID"
-
-images:
-  - "${_IMAGE_NAME}:${COMMIT_SHA}"
-  - "${_IMAGE_NAME}:latest"
-
-substitutions:
   _SERVICE_NAME: lynue-webapp
   _REGION: europe-west1
   _IMAGE_NAME: europe-west1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/lynue-webapp/lynue-webapp
