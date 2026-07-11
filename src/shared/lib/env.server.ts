@@ -9,28 +9,16 @@ type ServerEnv = z.infer<typeof schema>;
 
 let _cached: ServerEnv | null = null;
 
-const DEFAULT_BACKEND_URL = "https://backend-lynue-18847472647.us-central1.run.app";
-
 function resolveServerApiUrl(): string | undefined {
   const explicitApiUrl = process.env.API_URL?.trim();
   if (explicitApiUrl) return explicitApiUrl;
 
   const publicApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-  const publicAppUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? process.env.NEXT_PUBLIC_APP_URL?.trim();
-
   if (publicApiUrl && /^https?:\/\//i.test(publicApiUrl)) {
     return publicApiUrl;
   }
 
-  if (publicAppUrl) {
-    if (publicApiUrl && publicApiUrl.startsWith("/")) {
-      return new URL(publicApiUrl, publicAppUrl).toString();
-    }
-    return new URL("/api", publicAppUrl).toString();
-  }
-
-  return DEFAULT_BACKEND_URL;
+  throw new Error("API_URL or an absolute NEXT_PUBLIC_API_URL must be provided for server-side requests.");
 }
 
 function getEnv(): ServerEnv {
