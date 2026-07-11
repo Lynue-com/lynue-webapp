@@ -23,6 +23,33 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
+      - name: Export deploy envs from Google Secret Manager
+        run: |
+          API_URL=$(gcloud secrets versions access latest --secret="API_URL" --project="${PROJECT_ID}")
+          NEXT_PUBLIC_API_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_API_URL" --project="${PROJECT_ID}")
+          NEXT_PUBLIC_APP_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_APP_URL" --project="${PROJECT_ID}")
+          NEXT_PUBLIC_SITE_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_SITE_URL" --project="${PROJECT_ID}")
+          NEXT_PUBLIC_GA_MEASUREMENT_ID=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_GA_MEASUREMENT_ID" --project="${PROJECT_ID}")
+
+          if [ -z "$API_URL" ] && [ -z "$NEXT_PUBLIC_API_URL" ]; then
+            echo "ERROR: API_URL or NEXT_PUBLIC_API_URL must be provided."
+            exit 1
+          fi
+
+          if [ -n "$NEXT_PUBLIC_API_URL" ] && ! echo "$NEXT_PUBLIC_API_URL" | grep -Eq '^https?://'; then
+            if [ -z "$NEXT_PUBLIC_APP_URL" ] || ! echo "$NEXT_PUBLIC_APP_URL" | grep -Eq '^https?://'; then
+              echo "ERROR: A relative NEXT_PUBLIC_API_URL requires an absolute NEXT_PUBLIC_APP_URL."
+              exit 1
+            fi
+          fi
+
+          echo "Required deploy env vars are present."
+          echo "API_URL=$API_URL" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID" >> $GITHUB_ENV
+
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE }} \
@@ -31,5 +58,5 @@ jobs:
             --region ${{ env.REGION }} \
             --allow-unauthenticated \
             --port 3000 \
-            --set-env-vars API_URL=${{ secrets.API_URL }},NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }},NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }},NEXT_PUBLIC_SITE_URL=${{ secrets.NEXT_PUBLIC_SITE_URL }},NEXT_PUBLIC_GA_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }} \
-            --build-env-vars API_URL=${{ secrets.API_URL }},NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }},NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }},NEXT_PUBLIC_SITE_URL=${{ secrets.NEXT_PUBLIC_SITE_URL }},NEXT_PUBLIC_GA_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+            --set-env-vars "API_URL=$API_URL,NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL,NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID" \
+            --build-env-vars "API_URL=$API_URL,NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL,NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID"
