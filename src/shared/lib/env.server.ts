@@ -9,6 +9,8 @@ type ServerEnv = z.infer<typeof schema>;
 
 let _cached: ServerEnv | null = null;
 
+const DEFAULT_BACKEND_URL = "https://backend-lynue-18847472647.us-central1.run.app";
+
 function resolveServerApiUrl(): string | undefined {
   const explicitApiUrl = process.env.API_URL?.trim();
   if (explicitApiUrl) return explicitApiUrl;
@@ -28,7 +30,7 @@ function resolveServerApiUrl(): string | undefined {
     return new URL("/api", publicAppUrl).toString();
   }
 
-  return undefined;
+  return DEFAULT_BACKEND_URL;
 }
 
 function getEnv(): ServerEnv {
