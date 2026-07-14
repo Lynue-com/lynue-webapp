@@ -11,7 +11,7 @@ function getBackendUrl(): string {
 function getUrl(path: string, query: URLSearchParams) {
   const backendBase = getBackendUrl();
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(`${backendBase}${normalizedPath}`);
+  const url = new URL(`${backendBase}/api${normalizedPath}`);
   for (const [key, value] of query.entries()) {
     url.searchParams.set(key, value);
   }
