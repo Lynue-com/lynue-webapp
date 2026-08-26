@@ -1,11 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 function getBackendUrl(): string {
-  const backendUrl = process.env.API_URL?.trim() || process.env.NEXT_PUBLIC_API_URL?.trim();
+  const backendUrl = process.env.API_URL?.trim();
   if (!backendUrl) {
-    throw new Error("API_URL or NEXT_PUBLIC_API_URL must be set for API proxying.");
+    throw new Error("API_URL must be set for API proxying.");
   }
-  return backendUrl.replace(/\/+$/, "");
+
+  const parsedUrl = new URL(backendUrl);
+  if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+    throw new Error("API_URL must use HTTP or HTTPS.");
+  }
+
+  return parsedUrl.toString().replace(/\/+$/, "");
 }
 
 function getUrl(path: string, query: URLSearchParams) {
@@ -30,57 +36,85 @@ function sanitizeHeaders(headers: Headers) {
   return out;
 }
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  const { path } = await params;
-  const url = getUrl(path.join("/"), req.nextUrl.searchParams);
-  const response = await fetch(url.toString(), { headers: sanitizeHeaders(req.headers) });
-  const body = await response.arrayBuffer();
-  return new NextResponse(body, {
-    status: response.status,
-    headers: Object.fromEntries(response.headers.entries()),
-  });
+function forwardResponseHeaders(response: Response) {
+  const headers = new Headers();
+  for (const [key, value] of response.headers.entries()) {
+    const lower = key.toLowerCase();
+    if (
+      lower === "connection" ||
+      lower === "content-encoding" ||
+      lower === "content-length" ||
+      lower === "set-cookie" ||
+      lower === "transfer-encoding"
+    ) {
+      continue;
+    }
+    headers.append(key, value);
+  }
+
+  for (const cookie of response.headers.getSetCookie?.() ?? []) {
+    headers.append("set-cookie", cookie);
+  }
+
+  return headers;
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  const { path } = await params;
-  const url = getUrl(path.join("/"), req.nextUrl.searchParams);
-  const response = await fetch(url.toString(), {
-    method: "POST",
-    headers: sanitizeHeaders(req.headers),
-    body: await req.arrayBuffer(),
-  });
-  const body = await response.arrayBuffer();
-  return new NextResponse(body, {
-    status: response.status,
-    headers: Object.fromEntries(response.headers.entries()),
-  });
+async function proxyRequest(
+  req: NextRequest,
+  params: Promise<{ path: string[] }>,
+  method: "GET" | "HEAD" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS",
+) {
+  try {
+    const { path } = await params;
+    const url = getUrl(path.join("/"), req.nextUrl.searchParams);
+    const response = await fetch(url.toString(), {
+      method,
+      headers: sanitizeHeaders(req.headers),
+      signal: AbortSignal.any([req.signal, AbortSignal.timeout(15_000)]),
+      ...(method === "GET" || method === "HEAD" || method === "DELETE" || method === "OPTIONS"
+        ? {}
+        : { body: await req.arrayBuffer() }),
+    });
+
+    return new NextResponse(response.body, {
+      status: response.status,
+      headers: forwardResponseHeaders(response),
+    });
+  } catch (error) {
+    console.error("API proxy request failed", error instanceof Error ? error.message : error);
+    return NextResponse.json(
+      { status: false, message: "Backend service unavailable" },
+      { status: 502 },
+    );
+  }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  const { path } = await params;
-  const url = getUrl(path.join("/"), req.nextUrl.searchParams);
-  const response = await fetch(url.toString(), {
-    method: "PUT",
-    headers: sanitizeHeaders(req.headers),
-    body: await req.arrayBuffer(),
-  });
-  const body = await response.arrayBuffer();
-  return new NextResponse(body, {
-    status: response.status,
-    headers: Object.fromEntries(response.headers.entries()),
-  });
+type RouteContext = { params: Promise<{ path: string[] }> };
+
+export async function GET(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "GET");
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
-  const { path } = await params;
-  const url = getUrl(path.join("/"), req.nextUrl.searchParams);
-  const response = await fetch(url.toString(), {
-    method: "DELETE",
-    headers: sanitizeHeaders(req.headers),
-  });
-  const body = await response.arrayBuffer();
-  return new NextResponse(body, {
-    status: response.status,
-    headers: Object.fromEntries(response.headers.entries()),
-  });
+export async function HEAD(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "HEAD");
+}
+
+export async function POST(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "POST");
+}
+
+export async function PUT(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "PUT");
+}
+
+export async function PATCH(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "PATCH");
+}
+
+export async function DELETE(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "DELETE");
+}
+
+export async function OPTIONS(req: NextRequest, context: RouteContext) {
+  return proxyRequest(req, context.params, "OPTIONS");
 }
