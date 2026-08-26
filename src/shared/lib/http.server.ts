@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { serverEnv } from "./env.server";
 
 export class ApiError extends Error {
   public readonly status: number;
@@ -56,7 +57,12 @@ export async function serverFetch<T>(path: string, options: RequestOptions = {})
     init.body = JSON.stringify(json);
   }
 
-  const response = await fetch(buildUrl(path, query), init);
+  const url = new URL(buildUrl(path, query), `${serverEnv.API_URL.replace(/\/+$/, "")}/`);
+  if (!init.signal) {
+    init.signal = AbortSignal.timeout(15_000);
+  }
+
+  const response = await fetch(url, init);
 
   const contentType = response.headers.get("content-type");
   const payload = contentType?.includes("application/json") ? await response.json() : null;
