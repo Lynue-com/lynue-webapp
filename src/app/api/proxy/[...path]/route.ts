@@ -52,11 +52,13 @@ function forwardResponseHeaders(response: Response) {
     headers.append(key, value);
   }
 
-  for (const cookie of response.headers.getSetCookie?.() ?? []) {
-    headers.append("set-cookie", cookie);
-  }
-
   return headers;
+}
+
+function forwardCookies(response: Response, target: NextResponse) {
+  for (const cookie of response.headers.getSetCookie?.() ?? []) {
+    target.headers.append("set-cookie", cookie);
+  }
 }
 
 async function proxyRequest(
@@ -76,10 +78,12 @@ async function proxyRequest(
         : { body: await req.arrayBuffer() }),
     });
 
-    return new NextResponse(response.body, {
+    const proxiedResponse = new NextResponse(response.body, {
       status: response.status,
       headers: forwardResponseHeaders(response),
     });
+    forwardCookies(response, proxiedResponse);
+    return proxiedResponse;
   } catch (error) {
     console.error("API proxy request failed", error instanceof Error ? error.message : error);
     return NextResponse.json(

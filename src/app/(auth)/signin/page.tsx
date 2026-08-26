@@ -28,7 +28,8 @@ function SigninContent() {
       {
         onSuccess: () => {
           toast.success("Signed in successfully");
-          router.push(next);
+          router.replace(next);
+          router.refresh();
         },
         onError: (error) => {
           toast.error(error.message || "Unable to sign in");
