@@ -51,7 +51,7 @@ export default function DashboardProfilePage() {
             <UserRound size={18} />
           </div>
           <div>
-            <p className="text-sm font-semibold text-zinc-900">{fullName || "Lynue User"}</p>
+            <p className="text-sm font-semibold text-zinc-900">{fullName || "Vamlar User"}</p>
             <p className="text-xs text-zinc-500">{user?.email ?? "No email available"}</p>
           </div>
         </div>

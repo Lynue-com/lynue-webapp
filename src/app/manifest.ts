@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Lynue",
-    short_name: "Lynue",
+    name: "Vamlar",
+    short_name: "Vamlar",
     description: "Backend-first real estate discovery platform.",
     start_url: "/",
     display: "standalone",

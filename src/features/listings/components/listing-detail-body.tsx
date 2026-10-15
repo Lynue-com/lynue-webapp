@@ -402,7 +402,7 @@ export function ListingDetailBody({ listing }: Props) {
             <li>• Do not pay before physically inspecting the property</li>
             <li>• Verify the lister&apos;s identity before proceeding</li>
             <li>• Use official receipts and documentation</li>
-            <li>• Report suspicious listings to Lynue support</li>
+            <li>• Report suspicious listings to Vamlar support</li>
           </ul>
         </div>
       </div>

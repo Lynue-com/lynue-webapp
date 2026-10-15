@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Lynue",
-  description: "Read Lynue's terms of service governing use of our property platform, listing standards, and user responsibilities.",
+  title: "Terms of Service | Vamlar",
+  description: "Read Vamlar's terms of service governing use of our property platform, listing standards, and user responsibilities.",
   alternates: { canonical: `${siteConfig.url}/terms-of-services` },
   robots: { index: true, follow: true },
 };

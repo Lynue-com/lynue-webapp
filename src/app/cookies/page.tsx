@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Lynue",
-  description: "Learn how Lynue uses cookies for security, session management, and a better browsing experience.",
+  title: "Cookie Policy | Vamlar",
+  description: "Learn how Vamlar uses cookies for security, session management, and a better browsing experience.",
   alternates: { canonical: `${siteConfig.url}/cookies` },
 };
 

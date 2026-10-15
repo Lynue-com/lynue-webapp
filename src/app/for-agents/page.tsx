@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "For Agents | Lynue",
-  description: "Scale your real estate business with Lynue's agent tools. Manage inventory, respond to leads, and reach thousands of verified buyers and renters across Nigeria.",
+  title: "For Agents | Vamlar",
+  description: "Scale your real estate business with Vamlar's agent tools. Manage inventory, respond to leads, and reach thousands of verified buyers and renters across Nigeria.",
   alternates: { canonical: `${siteConfig.url}/for-agents` },
   openGraph: {
-    title: "For Agents | Lynue",
-    description: "Scale your real estate business with Lynue's agent tools.",
+    title: "For Agents | Vamlar",
+    description: "Scale your real estate business with Vamlar's agent tools.",
     url: `${siteConfig.url}/for-agents`,
   },
 };

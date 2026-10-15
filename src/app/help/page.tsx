@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "Help Center | Lynue",
-  description: "Get help with your Lynue account, listings, and transactions. Contact support for account, listing, and property transaction guidance.",
+  title: "Help Center | Vamlar",
+  description: "Get help with your Vamlar account, listings, and transactions. Contact support for account, listing, and property transaction guidance.",
   alternates: { canonical: `${siteConfig.url}/help` },
 };
 

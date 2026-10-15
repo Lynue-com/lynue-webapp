@@ -1,4 +1,4 @@
-# frontend-lynue3
+# Vamlar
 
 A modern 2026-grade Next.js frontend built from scratch with a backend-first architecture.
 

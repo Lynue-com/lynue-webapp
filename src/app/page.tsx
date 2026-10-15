@@ -97,8 +97,8 @@ export default async function HomePage() {
       {/* Hero */}
       <div className="relative mx-4 mb-10 h-[85vh] min-h-130 overflow-hidden rounded-3xl sm:mx-6 md:rounded-4xl lg:mx-8">
         <Image
-          src="https://storage.googleapis.com/lynue-public-assets/Lynue.com_Homepage_Image.avif"
-          alt="Modern property listings in Nigeria – Lynue"
+          src="https://storage.googleapis.com/lynue-public-assets/Vamlar.com_Homepage_Image.avif"
+          alt="Modern property listings in Nigeria – Vamlar"
           fill
           priority
           sizes="100vw"

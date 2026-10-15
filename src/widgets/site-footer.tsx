@@ -24,7 +24,7 @@ const socials = [
   { label: "Instagram", href: "https://www.instagram.com/lynuecom/" },
   { label: "Facebook", href: "https://web.facebook.com/lynuecom/" },
   { label: "LinkedIn", href: "https://linkedin.com/company/lynue" },
-  { label: "X / Twitter", href: "https://x.com/Lynuecom" },
+  { label: "X / Twitter", href: "https://x.com/Vamlarcom" },
 ];
 
 export function SiteFooter() {
@@ -34,7 +34,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           {/* Brand + socials */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-xl font-black text-white">Lynue</p>
+            <p className="text-xl font-black text-white">Vamlar</p>
             <p className="mt-2 text-xs leading-5 text-zinc-400">
               Nigeria&apos;s trusted property platform for rent and sale.
             </p>
@@ -97,7 +97,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-800 pt-8 sm:flex-row">
           <p className="text-xs text-zinc-500">
-            &copy; {new Date().getFullYear()} Lynue Inc. 2026 All rights reserved
+            &copy; {new Date().getFullYear()} Vamlar Inc. 2026 All rights reserved
           </p>
           <a href="mailto:info@lynue.com" className="text-xs text-zinc-500 hover:text-white">
             info@lynue.com

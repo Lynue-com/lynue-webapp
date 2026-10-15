@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "For Buyers | Lynue",
-  description: "Find and compare properties for sale across Nigeria. Browse verified listings, filter by price and location, and buy your dream home with confidence on Lynue.",
+  title: "For Buyers | Vamlar",
+  description: "Find and compare properties for sale across Nigeria. Browse verified listings, filter by price and location, and buy your dream home with confidence on Vamlar.",
   alternates: { canonical: `${siteConfig.url}/for-buyers` },
   openGraph: {
-    title: "For Buyers | Lynue",
+    title: "For Buyers | Vamlar",
     description: "Find and compare properties for sale across Nigeria.",
     url: `${siteConfig.url}/for-buyers`,
   },

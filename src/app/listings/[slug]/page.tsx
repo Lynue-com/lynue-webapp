@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: ListingDetailPageProps): Prom
   const isRent = listing.listType === "RENT";
   const priceStr = listing.price ? `₦${listing.price.toLocaleString()}${isRent ? "/yr" : ""}` : "";
   const title = `${listing.title} in ${listing.city}, ${listing.state}${priceStr ? ` — ${priceStr}` : ""} | ${siteConfig.name}`;
-  const description = listing.description?.slice(0, 155) ?? `${listing.title} — ${listing.city}, ${listing.state}. Browse photos, features, and more on Lynue.`;
+  const description = listing.description?.slice(0, 155) ?? `${listing.title} — ${listing.city}, ${listing.state}. Browse photos, features, and more on Vamlar.`;
   const url = `${siteConfig.url}/listings/${listing.slug}`;
   const image = listing.images[0]?.url;
 

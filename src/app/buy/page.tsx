@@ -4,7 +4,7 @@ import { ListingsExplorer } from "@/features/listings/components/listings-explor
 import { buildPageMetadata } from "@/shared/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Houses & Land for Sale in Nigeria | Lynue",
+  title: "Houses & Land for Sale in Nigeria | Vamlar",
   description:
     "Buy your dream home or investment property in Nigeria. Browse houses, duplexes, and land for sale in Lagos, Abuja, and across the country.",
   path: "/buy",

@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { siteConfig } from "@/shared/config/site";
 
 export const metadata: Metadata = {
-  title: "Find a Rental | Lynue",
-  description: "Search verified rental listings across Nigeria with smart filters for price, location, bedrooms, and more. Find apartments, houses, and short-stay properties on Lynue.",
+  title: "Find a Rental | Vamlar",
+  description: "Search verified rental listings across Nigeria with smart filters for price, location, bedrooms, and more. Find apartments, houses, and short-stay properties on Vamlar.",
   alternates: { canonical: `${siteConfig.url}/for-renters` },
   openGraph: {
-    title: "Find a Rental | Lynue",
+    title: "Find a Rental | Vamlar",
     description: "Search verified rental listings across Nigeria with smart filters.",
     url: `${siteConfig.url}/for-renters`,
   },

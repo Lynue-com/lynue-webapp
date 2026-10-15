@@ -970,7 +970,7 @@ export function ListWizard() {
         <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-sm">
           <h2 className="mb-3 text-xl font-bold text-zinc-900">Sign in required</h2>
           <p className="mb-6 text-sm text-zinc-600">
-            To list your property on <strong>Lynue</strong>, please sign in or create an account.
+            To list your property on <strong>Vamlar</strong>, please sign in or create an account.
           </p>
           <Link
             href="/auth/signin"

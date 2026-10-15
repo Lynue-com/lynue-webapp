@@ -4,7 +4,7 @@ import { ListingsExplorer } from "@/features/listings/components/listings-explor
 import { buildPageMetadata } from "@/shared/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Apartments & Houses for Rent in Nigeria | Lynue",
+  title: "Apartments & Houses for Rent in Nigeria | Vamlar",
   description: "Find your next rental home in Nigeria. Browse verified apartments, houses, and studio flats in Lagos, Abuja, Port Harcourt, and more.",
   path: "/rent",
   keywords: ["apartments for rent Nigeria", "houses for rent", "rental homes Nigeria"],
