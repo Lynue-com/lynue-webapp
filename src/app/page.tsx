@@ -8,13 +8,13 @@ import type { Listing } from "@/features/listings/model/types";
 import { serverFetch } from "@/shared/lib/http.server";
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name}|Find Properties in Nigeria.`,
+  title: `${siteConfig.name} | Houses & Apartments for Rent and Sale in Nigeria`,
   description:
-    "Search thousands of verified apartments, houses, and land listings for rent or sale across Lagos, Abuja, and all of Nigeria. List your property for free.",
+    "Find houses, apartments, shops, lands for rent or sale in Lagos, Abuja and across Nigeria. Browse verified listings, compare prices, and list your property free.",
   alternates: { canonical: siteConfig.url },
   openGraph: {
-    title: `${siteConfig.name}|Find Properties in Nigeria.`,
-    description: "Search verified property listings across Nigeria.",
+    title: `${siteConfig.name} | Houses & Apartments for Rent and Sale in Nigeria.`,
+    description: "Find houses, apartments, shops, lands for rent or sale in Lagos, Abuja and across Nigeria. Browse verified listings, compare prices, and list your property free.",
     url: siteConfig.url,
   },
 };
