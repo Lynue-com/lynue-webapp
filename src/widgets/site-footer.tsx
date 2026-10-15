@@ -99,8 +99,8 @@ export function SiteFooter() {
           <p className="text-xs text-zinc-500">
             &copy; {new Date().getFullYear()} Vamlar Inc. 2026 All rights reserved
           </p>
-          <a href="mailto:info@lynue.com" className="text-xs text-zinc-500 hover:text-white">
-            info@lynue.com
+          <a href="mailto:info@vamlar.com" className="text-xs text-zinc-500 hover:text-white">
+            info@vamlar.com
           </a>
         </div>
       </div>
