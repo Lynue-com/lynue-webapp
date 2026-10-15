@@ -11,7 +11,7 @@ const explore = [
 const support = [
   { label: "Help Center", href: "/help" },
   { label: "Fair Housing Policy", href: "/fair-housing-policy" },
-  { label: "Blog", href: "https://blog.lynue.com/", external: true },
+  { label: "Blog", href: "https://blog.vamlar.com/", external: true },
 ];
 
 const legal = [
@@ -21,10 +21,10 @@ const legal = [
 ];
 
 const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/lynuecom/" },
-  { label: "Facebook", href: "https://web.facebook.com/lynuecom/" },
-  { label: "LinkedIn", href: "https://linkedin.com/company/lynue" },
-  { label: "X / Twitter", href: "https://x.com/Vamlarcom" },
+  { label: "Instagram", href: "https://www.instagram.com/vamlar.com/" },
+  { label: "Facebook", href: "https://web.facebook.com/vamlar.com/" },
+  { label: "LinkedIn", href: "https://linkedin.com/company/vamlar" },
+  { label: "X / Twitter", href: "https://x.com/Vamlar.com" },
 ];
 
 export function SiteFooter() {
