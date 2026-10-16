@@ -30,17 +30,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Send password reset email
+    // 2. Send verification email
     try {
-      const { sendEmail } = await import("../../../lib/email/server");
+      const { sendEmail } = await import("../../../../lib/email/server");
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vamlar.com";
       const resetUrl = `${appUrl}/reset-password?token=`;
+      const email = validated.email!;
       await sendEmail({
-        to: validated.email,
+        to: email,
         template: "password-reset-email",
         templateProps: {
-          firstName: validated.email.split("@")[0],
-          email: validated.email,
+          firstName: email.split("@")[0],
+          email,
           resetUrl,
         },
       });

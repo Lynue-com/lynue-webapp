@@ -32,13 +32,14 @@ export async function POST(req: NextRequest) {
 
     // 2. Send verification email
     try {
-      const { sendEmail } = await import("../../../lib/email/server");
+      const { sendEmail } = await import("../../../../lib/email/server");
+      const email = validated.email!;
       await sendEmail({
-        to: validated.email,
+        to: email,
         template: "email-resend",
         templateProps: {
-          firstName: validated.email.split("@")[0],
-          email: validated.email,
+          firstName: email.split("@")[0],
+          email,
           appName: process.env.NEXT_PUBLIC_APP_NAME || "Vamlar",
         },
       });

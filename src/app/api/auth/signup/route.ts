@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Send verification email
     try {
-      const { sendEmail } = await import("../../lib/email/server");
+      const { sendEmail } = await import("../../../../lib/email/server");
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vamlar.com";
       await sendEmail({
         to: validated.email,
