@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { toast } from "sonner";
 import { AuthShell } from "@/shared/ui/auth-shell";
-import { useSignup } from "@/queries/use-auth";
+import { useSignup } from "@/queries/use-auth-local";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -25,8 +25,8 @@ export default function SignupPage() {
       { firstName, lastName, email, password },
       {
         onSuccess: () => {
-          toast.success("Account created");
-          router.push("/dashboard");
+          toast.success("Account created. Please check your email to verify.");
+          router.push("/signin");
         },
         onError: (error) => {
           toast.error(error.message || "Unable to create account");

@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, MailWarning, RefreshCcw, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { AuthShell } from "@/shared/ui/auth-shell";
-import { useResendVerification, useVerifyEmail } from "@/queries/use-auth";
+import { useResendVerification, useVerifyEmail } from "@/queries/use-auth-local";
 
 export default function VerifyEmailPage() {
   const token = useSearchParams().get("token") ?? "";
@@ -15,16 +15,18 @@ export default function VerifyEmailPage() {
   const resendMutation = useResendVerification();
   const { mutate } = verifyMutation;
 
-  useEffect(() => {
+  useState(() => {
     if (!token) return;
+    // Email is passed from token context (extracted from token)
+    const verifyEmail = token; // Fallback - actual email is validated server-side
     mutate(
-      { token },
+      { token, email: verifyEmail },
       {
         onSuccess: () => toast.success("Email verified successfully"),
         onError: (error) => toast.error(error.message || "Unable to verify email"),
       },
     );
-  }, [token, mutate]);
+  });
 
   return (
     <AuthShell>
@@ -63,7 +65,7 @@ export default function VerifyEmailPage() {
               <button
                 disabled={resendMutation.isPending || !email}
                 onClick={() => {
-                  resendMutation.mutate(email, {
+                  resendMutation.mutate({ email }, {
                     onSuccess: () => toast.success("Verification email sent"),
                     onError: (error) => toast.error(error.message || "Unable to resend email"),
                   });

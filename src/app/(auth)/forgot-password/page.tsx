@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { AuthShell } from "@/shared/ui/auth-shell";
-import { useForgotPassword } from "@/queries/use-auth";
+import { useForgotPassword } from "@/queries/use-auth-local";
 
 export default function ForgotPasswordPage() {
   const forgotMutation = useForgotPassword();

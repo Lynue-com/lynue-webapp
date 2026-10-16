@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { AuthShell } from "@/shared/ui/auth-shell";
-import { useResetPassword } from "@/queries/use-auth";
+import { useResetPassword } from "@/queries/use-auth-local";
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
