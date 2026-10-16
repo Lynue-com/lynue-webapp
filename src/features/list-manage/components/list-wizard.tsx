@@ -293,7 +293,19 @@ function StepType({ s, set }: { s: FormState; set: (p: Partial<FormState>) => vo
       <div className="space-y-8">
         <div>
           <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">Listing Type</p>
-          <SelectGrid value={s.listType} onChange={(v) => set({ listType: v })} options={LIST_TYPES} />
+          <SelectGrid
+            value={s.listType}
+            onChange={(v) => {
+              // SHORT_STAY is not sellable — clear it if the type flips to SELL,
+              // otherwise the stale category would slip past the filter below.
+              if (v === "SELL" && s.category === "SHORT_STAY") {
+                set({ listType: v, category: "", subCategoryId: undefined });
+              } else {
+                set({ listType: v });
+              }
+            }}
+            options={LIST_TYPES}
+          />
         </div>
         <div>
           <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-400">You are</p>

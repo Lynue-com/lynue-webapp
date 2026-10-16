@@ -197,7 +197,7 @@ export const PasswordResetEmail = ({
                 lineHeight: "1.5",
               }}
             >
-              If you're still having trouble, reply to this email and we'll
+              If you&apos;re still having trouble, reply to this email and we&apos;ll
               help you out.
             </Text>
           </Section>

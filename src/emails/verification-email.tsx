@@ -27,7 +27,6 @@ const BASE_URL = getCanonicalUrl();
 
 export const VerificationEmail = ({
   firstName,
-  email,
   verificationUrl,
   appName,
   logoUrl,

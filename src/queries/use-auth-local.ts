@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 /**
  * Local auth operations that route through this Next.js app's
@@ -10,7 +9,6 @@ import { useRouter } from "next/navigation";
 
 export function useSignup() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: async (payload: { firstName: string; lastName: string; email: string; password: string }) => {
@@ -32,8 +30,6 @@ export function useSignup() {
 }
 
 export function useForgotPassword() {
-  const router = useRouter();
-
   return useMutation({
     mutationFn: async (payload: { email: string }) => {
       const res = await fetch("/api/auth/forgot-password", {

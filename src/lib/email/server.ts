@@ -72,10 +72,10 @@ export async function sendEmail({
   const { data, error } = await resend.emails.send({
     from,
     to,
-    replyTo,
     subject: getSubject(template, templateProps),
     react: renderedContent,
-  } as any);
+    ...(replyTo !== undefined && { replyTo }),
+  });
 
   if (error) {
     console.error(`[Email] Failed to send ${template} to ${to}:`, error);

@@ -111,7 +111,7 @@ export default async function HomePage() {
             Find your <span className="text-[#FFE380]">dream home</span>
           </h1>
           <p className="mx-auto mb-10 mt-4 max-w-md text-base text-zinc-200">
-            Buy, rent, or invest with confidence. Discover properties that match what you're looking for.
+            Buy, rent, or invest with confidence. Discover properties that match what you&apos;re looking for.
           </p>
           <HeroSearch />
         </div>

@@ -5,11 +5,9 @@ import {
   Heading,
   Html,
   Img,
-  Link,
   Preview,
   Text,
   Section,
-  Button,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -97,7 +95,7 @@ export const EmailResendEmail = ({
               marginBottom: "24px",
             }}
           >
-            We've sent a fresh verification email to <Text style={{ fontWeight: "600" }}>{email}</Text>. Please check your inbox (and spam folder) for an email from us with a verify link.
+            We&apos;ve sent a fresh verification email to <Text style={{ fontWeight: "600" }}>{email}</Text>. Please check your inbox (and spam folder) for an email from us with a verify link.
           </Text>
 
           <Text
@@ -108,7 +106,7 @@ export const EmailResendEmail = ({
               marginBottom: "24px",
             }}
           >
-            If you didn't receive it, please ensure your email address is correct and try again in a few minutes.
+            If you didn&apos;t receive it, please ensure your email address is correct and try again in a few minutes.
           </Text>
 
           {/* Good news text */}
@@ -141,7 +139,7 @@ export const EmailResendEmail = ({
                 lineHeight: "1.5",
               }}
             >
-              If you still don't receive the email after 10 minutes, please
+              If you still don&apos;t receive the email after 10 minutes, please
               contact our support team.
             </Text>
           </Section>

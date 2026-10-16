@@ -1,44 +1,10 @@
 import "server-only";
-import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 // =============================================================================
-// BACKEND PROXIES
+// VALIDATION SCHEMAS
 // =============================================================================
 
-const backendUrl = process.env.API_URL?.trim();
-
-if (!backendUrl) {
-  console.error(`[Auth Email] API_URL is not configured`);
-}
-
-async function proxyToBackend(
-  path: string,
-  method: string,
-  body: unknown,
-): Promise<{ ok: boolean; status: number; data: unknown }> {
-  if (!backendUrl) {
-    return { ok: false, status: 503, data: { message: "Backend not configured" } };
-  }
-
-  try {
-    const url = new URL(`${backendUrl}/api${path}`);
-    const response = await fetch(url.toString(), {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(15_000),
-    });
-
-    const data = await response.json();
-    return { ok: response.ok, status: response.status, data };
-  } catch (error) {
-    console.error(`[Auth Email] Proxy to ${path} failed:`, error);
-    return { ok: false, status: 502, data: { message: "Backend unavailable" } };
-  }
-}
-
-// Validation schemas
 const signupSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
