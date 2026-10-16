@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/shared/lib/env";
-import { siteConfig } from "@/shared/config/site";
 import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 import { serverFetch } from "@/shared/lib/http.server";
 
