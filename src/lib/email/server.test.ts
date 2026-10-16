@@ -273,7 +273,7 @@ describe("sendEmail", () => {
         },
       });
 
-      const callArg = mockEmailsSend.mock.calls[0][0];
+      const callArg = mockEmailsSend.mock.calls[0]![0];
       expect(callArg.subject).toBe("Verify your Vamlar email");
     });
   });

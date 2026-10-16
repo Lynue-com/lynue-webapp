@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/shared/lib/env";
+import { siteConfig } from "@/shared/config/site";
+import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 import { serverFetch } from "@/shared/lib/http.server";
 
 type SitemapEntry = {
@@ -13,7 +15,13 @@ type SitemapResponse = {
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = env.NEXT_PUBLIC_APP_URL;
+  const base = getCanonicalUrl();
+
+  if (env.NEXT_PUBLIC_APP_URL !== base) {
+    console.warn(
+      `[Sitemap] NEXT_PUBLIC_APP_URL (${env.NEXT_PUBLIC_APP_URL}) differs from canonical URL (${base}). Using canonical URL for sitemap to avoid cross-domain URL errors.`,
+    );
+  }
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${base}/`,               lastModified: new Date(), changeFrequency: "daily",   priority: 1.0 },

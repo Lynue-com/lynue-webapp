@@ -22,7 +22,9 @@ interface PasswordResetEmailProps {
   expiresInHours?: number;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://vamlar.com";
+import { getCanonicalUrl } from "@/shared/lib/canonical-url";
+
+const BASE_URL = getCanonicalUrl();
 
 export const PasswordResetEmail = ({
   firstName,

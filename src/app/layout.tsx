@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/shared/config/site";
 import { env } from "@/shared/lib/env";
+import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 import { SiteFooter } from "@/widgets/site-footer";
 import { SiteHeader } from "@/widgets/site-header";
 import { MobileBottomNav } from "@/widgets/mobile-bottom-nav";
@@ -46,7 +47,7 @@ const organizationJsonLd = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getCanonicalUrl()),
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: ["/favicon.svg"],

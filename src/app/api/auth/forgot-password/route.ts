@@ -1,6 +1,7 @@
 import "server-only";
 import { type NextRequest, NextResponse } from "next/server";
 import { forgotPasswordSchema } from "../_utils";
+import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
     // 2. Send verification email
     try {
       const { sendEmail } = await import("../../../../lib/email/server");
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://vamlar.com";
+      const appUrl = getCanonicalUrl();
       const resetUrl = `${appUrl}/reset-password?token=`;
       const email = validated.email!;
       await sendEmail({

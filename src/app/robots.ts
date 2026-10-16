@@ -1,14 +1,15 @@
 import type { MetadataRoute } from "next";
-import { env } from "@/shared/lib/env";
+import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 
 export default function robots(): MetadataRoute.Robots {
+  const base = getCanonicalUrl();
   return {
     rules: {
       userAgent: "*",
       allow: "/",
       disallow: ["/api/"],
     },
-    host: env.NEXT_PUBLIC_APP_URL,
-    sitemap: [`${env.NEXT_PUBLIC_APP_URL}/sitemap.xml`],
+    host: base,
+    sitemap: [`${base}/sitemap.xml`],
   };
 }
