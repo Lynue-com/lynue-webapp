@@ -1,6 +1,6 @@
 import "server-only";
 import { Resend } from "resend";
-import type { ComponentType, JSX } from "react";
+import type { JSX } from "react";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -67,7 +67,7 @@ export async function sendEmail({
   }
 
   // Cast to ComponentType and pass templateProps (extra props are fine in React)
-  const renderedContent = (emailComponent as ComponentType<EmailTemplateProps>)(templateProps);
+  const renderedContent = (emailComponent as (props: EmailTemplateProps) => JSX.Element)(templateProps);
 
   const { data, error } = await resend.emails.send({
     from,

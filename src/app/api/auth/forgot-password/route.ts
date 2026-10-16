@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         to: email,
         template: "password-reset-email",
         templateProps: {
-          firstName: email.split("@")[0],
+          firstName: email.split("@")[0]!,
           email,
           resetUrl,
         },

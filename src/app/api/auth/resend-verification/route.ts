@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         to: email,
         template: "email-resend",
         templateProps: {
-          firstName: email.split("@")[0],
+          firstName: email.split("@")[0]!,
           email,
           appName: process.env.NEXT_PUBLIC_APP_NAME || "Vamlar",
         },
