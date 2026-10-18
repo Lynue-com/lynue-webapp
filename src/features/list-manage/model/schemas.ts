@@ -62,15 +62,28 @@ const listingPayloadBaseSchema = z.object({
 // categories, and these rules enforce the same invariant at the payload
 // layer so stale state can never slip through to the API.
 // (The backend's createListingSchema currently has no such cross-field rule.)
-export const listingCreatePayloadSchema = listingPayloadBaseSchema.refine(
-  (payload) => payload.listType !== "SELL" || payload.category !== "SHORT_STAY",
-  { message: "Short Stay listings cannot be for sale", path: ["category"] },
-);
+export const listingCreatePayloadSchema = listingPayloadBaseSchema
+  .refine(
+    (payload) => payload.listType !== "SELL" || payload.category !== "SHORT_STAY",
+    { message: "Short Stay listings cannot be for sale", path: ["category"] },
+  )
+  .refine(
+    (payload) => payload.listType !== "SELL" || payload.priceUnit == null,
+    {
+      message: "Rental period (priceUnit) does not apply to SELL listings",
+      path: ["priceUnit"],
+    },
+  );
 
 // Partial patch validation for the edit form (mirrors the backend's
 // updateListingSchema) with the same cross-field guard.
 export const listingUpdatePayloadSchema = listingPayloadBaseSchema
   .partial()
+  .extend({
+    // null explicitly unsets a rental period (e.g. when flipping to SELL);
+    // the backend force-clears priceUnit on any SELL listing regardless.
+    priceUnit: z.enum(["YEAR", "MONTH", "WEEK", "DAY"]).nullable().optional(),
+  })
   .refine(
     (payload) => payload.listType !== "SELL" || payload.category !== "SHORT_STAY",
     { message: "Short Stay listings cannot be for sale", path: ["category"] },

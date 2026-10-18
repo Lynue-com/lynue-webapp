@@ -184,6 +184,8 @@ describe("EditListingForm - list type / category guards", () => {
     expect(id).toBe("listing-1");
     expect(payload).toMatchObject({ listType: "SELL", category: "COMMERCIAL" });
     expect(payload.subCategoryId).toBeUndefined();
+    // the rental period is explicitly unset when the type flips to SELL
+    expect(payload.priceUnit).toBeNull();
 
     await waitFor(() =>
       expect(pushMock).toHaveBeenCalledWith("/dashboard/listings"),
@@ -202,5 +204,28 @@ describe("EditListingForm - list type / category guards", () => {
     expect(payload).not.toHaveProperty("furnishing");
     expect(payload).not.toHaveProperty("condition");
     expect(payload).not.toHaveProperty("titleDocument");
+  });
+
+  it("clears the rental period when the type flips to SELL", async () => {
+    renderForm({
+      ...shortStayListing,
+      category: "RESIDENTIAL",
+      subCategory: { id: 1, name: "Apartment", slug: "apartment" },
+    });
+
+    fireEvent.change(getFieldSelect("List Type"), { target: { value: "SELL" } });
+
+    // the period selector only exists for RENT listings
+    expect(screen.queryByText("Price Period")).toBeNull();
+    // a sellable category is left untouched
+    expect(getFieldSelect("Category").value).toBe("RESIDENTIAL");
+
+    fireEvent.click(screen.getByRole("button", { name: "Save Changes" }));
+
+    await waitFor(() => expect(updateListing).toHaveBeenCalledTimes(1));
+    const payload = vi.mocked(updateListing).mock.calls[0]![1];
+    expect(payload.priceUnit).toBeNull();
+    expect(payload.category).toBe("RESIDENTIAL");
+    expect(payload.listType).toBe("SELL");
   });
 });

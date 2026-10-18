@@ -63,7 +63,7 @@ type Listing = z.infer<typeof listingSchema> & Record<string, unknown>;
 
 type ListingImage = { id?: string; url: string };
 
-type FormState = Record<string, string | number | boolean | undefined>;
+type FormState = Record<string, string | number | boolean | null | undefined>;
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -122,7 +122,7 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
     };
   }, [newPreviews]);
 
-  const setField = (key: string, value: string | number | boolean | undefined) => {
+  const setField = (key: string, value: string | number | boolean | null | undefined) => {
     setFormState((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -350,12 +350,16 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
                   value={String(form.listType ?? "")}
                   onChange={(e) => {
                     const next = e.target.value;
-                    // SHORT_STAY is not sellable — mirror the wizard's guard so
-                    // a stale category can't slip past the option filter below.
-                    if (next === "SELL" && form.category === "SHORT_STAY") {
+                    if (next === "SELL") {
+                      // Mirror the server rules: SELL has no rental period, and
+                      // SHORT_STAY is not sellable (clear any stale category so
+                      // it can't slip past the option filter below).
                       setField("listType", next);
-                      setField("category", "");
-                      setField("subCategoryId", undefined);
+                      setField("priceUnit", null);
+                      if (form.category === "SHORT_STAY") {
+                        setField("category", "");
+                        setField("subCategoryId", undefined);
+                      }
                     } else {
                       setField("listType", next);
                     }

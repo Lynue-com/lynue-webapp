@@ -213,6 +213,23 @@ describe("list-manage-api - full listing lifecycle", () => {
       ).rejects.toThrow(/Short Stay listings cannot be for sale/);
       expect(mockedApiRequest).not.toHaveBeenCalled();
     });
+
+    it("refuses a rental period on a SELL listing", async () => {
+      await expect(
+        createListing({
+          title: "Serviced office for sale",
+          description: "A commercial listing that must not carry a period",
+          listType: "SELL",
+          category: "COMMERCIAL",
+          priceUnit: "DAY",
+          price: 85000000,
+          address: "45 Opebi Road",
+          city: "Ikeja",
+          state: "Lagos",
+        }),
+      ).rejects.toThrow(/Rental period \(priceUnit\) does not apply to SELL/);
+      expect(mockedApiRequest).not.toHaveBeenCalled();
+    });
   });
 
   describe("publish / unpublish lifecycle", () => {

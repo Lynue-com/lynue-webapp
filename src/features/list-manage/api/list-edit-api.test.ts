@@ -69,4 +69,14 @@ describe("updateListing - payload validation", () => {
       "unknownKey",
     );
   });
+
+  it("accepts an explicit priceUnit: null so a rental period can be unset", async () => {
+    mockedApiRequest.mockResolvedValue({ status: true, listing: mockListing });
+
+    await updateListing("listing-1", { priceUnit: null });
+
+    expect(mockedApiRequest.mock.calls[0]?.[1]?.json).toMatchObject({
+      priceUnit: null,
+    });
+  });
 });
