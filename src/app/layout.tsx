@@ -49,9 +49,12 @@ const organizationJsonLd = {
 export const metadata: Metadata = {
   metadataBase: new URL(getCanonicalUrl()),
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+    ],
     shortcut: ["/favicon.svg"],
-    apple: ["/favicon.svg"],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   title: {
     default: siteConfig.name,
