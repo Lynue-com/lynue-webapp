@@ -97,8 +97,8 @@ export default async function HomePage() {
       {/* Hero */}
       <div className="relative mx-4 mb-10 h-[85vh] min-h-130 overflow-hidden rounded-3xl sm:mx-6 md:rounded-4xl lg:mx-8">
         <Image
-          src="https://storage.googleapis.com/lynue-public-assets/Vamlar.com_Homepage_Image.avif"
-          alt="Modern property listings in Nigeria – Vamlar"
+          src="https://storage.googleapis.com/lynue-public-assets/lynue.com_Homepage_Image.avif"
+          alt="Property listings in Nigeria – Vamlar"
           fill
           priority
           sizes="100vw"
@@ -111,7 +111,7 @@ export default async function HomePage() {
             Find your <span className="text-[#FFE380]">dream home</span>
           </h1>
           <p className="mx-auto mb-10 mt-4 max-w-md text-base text-zinc-200">
-            Buy, rent, or invest with confidence. Discover properties that match what you&apos;re looking for.
+            Buy, rent, sell with confidence. Discover properties that match what you&apos;re looking for.
           </p>
           <HeroSearch />
         </div>
