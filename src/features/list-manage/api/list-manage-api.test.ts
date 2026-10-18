@@ -197,6 +197,24 @@ describe("list-manage-api - full listing lifecycle", () => {
     });
   });
 
+  describe("createListing - rejects an invalid type/category combination", () => {
+    it("refuses SELL + SHORT_STAY before hitting the network", async () => {
+      await expect(
+        createListing({
+          title: "Short stay apartment for sale",
+          description: "This combination is not allowed and must be rejected",
+          listType: "SELL",
+          category: "SHORT_STAY",
+          price: 50000000,
+          address: "12 Admiralty Way",
+          city: "Lagos",
+          state: "Lagos",
+        }),
+      ).rejects.toThrow(/Short Stay listings cannot be for sale/);
+      expect(mockedApiRequest).not.toHaveBeenCalled();
+    });
+  });
+
   describe("publish / unpublish lifecycle", () => {
     it("publishes a draft listing", async () => {
       mockedApiRequest.mockResolvedValue({ status: true, listing: { ...mockCreatedListing, status: "PUBLISHED" } });

@@ -214,6 +214,11 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
         if (!Number.isNaN(n)) payload[key] = n;
       }
     }
+    // Optional enums must be omitted instead of sent as "" — both the
+    // update schema and the backend reject empty strings with a 400.
+    for (const key of ["priceUnit", "furnishing", "condition", "titleDocument"]) {
+      if (payload[key] === "") delete payload[key];
+    }
     updateMutation.mutate(payload);
   };
 
@@ -343,7 +348,18 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
               <Field label="List Type">
                 <select
                   value={String(form.listType ?? "")}
-                  onChange={(e) => setField("listType", e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    // SHORT_STAY is not sellable — mirror the wizard's guard so
+                    // a stale category can't slip past the option filter below.
+                    if (next === "SELL" && form.category === "SHORT_STAY") {
+                      setField("listType", next);
+                      setField("category", "");
+                      setField("subCategoryId", undefined);
+                    } else {
+                      setField("listType", next);
+                    }
+                  }}
                   className={inputClass}
                 >
                   <option value="RENT">For Rent</option>
@@ -360,10 +376,17 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
                   }}
                   className={inputClass}
                 >
+                  <option value="">Select category</option>
                   <option value="RESIDENTIAL">Residential</option>
                   <option value="COMMERCIAL">Commercial</option>
                   <option value="LAND">Land</option>
-                  <option value="SHORT_STAY">Short Stay</option>
+                  {/* Hidden for SELL listings, but kept visible when a legacy
+                      listing is already stored as SELL + SHORT_STAY so the
+                      saved value stays truthful (the payload schema blocks
+                      re-saving that combination). */}
+                  {form.listType !== "SELL" || form.category === "SHORT_STAY" ? (
+                    <option value="SHORT_STAY">Short Stay</option>
+                  ) : null}
                 </select>
               </Field>
             </div>
@@ -660,7 +683,7 @@ export function EditListingForm({ listing }: { listing: z.infer<typeof listingSc
           <button
             type="button"
             onClick={handleSave}
-            disabled={busy}
+            disabled={busy || !form.category}
             className="flex items-center gap-2 rounded-full bg-zinc-900 px-8 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
           >
             {busy ? <Loader2 size={16} className="animate-spin" /> : null}

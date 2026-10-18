@@ -20,7 +20,7 @@ export const categoriesResponseSchema = z.object({
   categories: z.array(categorySchema),
 });
 
-export const listingCreatePayloadSchema = z.object({
+const listingPayloadBaseSchema = z.object({
   title: z.string().min(3).max(200),
   description: z.string().min(10),
   listType: z.enum(["RENT", "SELL"]),
@@ -57,6 +57,24 @@ export const listingCreatePayloadSchema = z.object({
   amenities: z.array(z.object({ slug: z.string(), label: z.string() })).optional(),
   facilities: z.array(z.object({ slug: z.string(), label: z.string() })).optional(),
 });
+
+// SHORT_STAY is rent-only: the wizard filters Short Stay out of the SELL
+// categories, and these rules enforce the same invariant at the payload
+// layer so stale state can never slip through to the API.
+// (The backend's createListingSchema currently has no such cross-field rule.)
+export const listingCreatePayloadSchema = listingPayloadBaseSchema.refine(
+  (payload) => payload.listType !== "SELL" || payload.category !== "SHORT_STAY",
+  { message: "Short Stay listings cannot be for sale", path: ["category"] },
+);
+
+// Partial patch validation for the edit form (mirrors the backend's
+// updateListingSchema) with the same cross-field guard.
+export const listingUpdatePayloadSchema = listingPayloadBaseSchema
+  .partial()
+  .refine(
+    (payload) => payload.listType !== "SELL" || payload.category !== "SHORT_STAY",
+    { message: "Short Stay listings cannot be for sale", path: ["category"] },
+  );
 
 export const listingCreateResponseSchema = z.object({
   status: z.boolean(),

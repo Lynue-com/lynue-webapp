@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { apiRequest } from "@/shared/lib/http";
 import { listingSchema } from "@/features/listings/model/schemas";
+import { listingUpdatePayloadSchema } from "@/features/list-manage/model/schemas";
 
 const listingSingleResponseSchema = z.object({
   status: z.boolean(),
@@ -16,9 +17,10 @@ export async function getListingForEdit(id: string) {
 }
 
 export async function updateListing(id: string, payload: Record<string, unknown>) {
+  const validated = listingUpdatePayloadSchema.parse(payload);
   const response = await apiRequest<unknown>(`/api/list/${id}`, {
     method: "PATCH",
-    json: payload,
+    json: validated,
     credentials: "include",
   });
   return listingSingleResponseSchema.parse(response).listing;
