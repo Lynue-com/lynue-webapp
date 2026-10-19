@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     // second email is sent from here.
     return NextResponse.json({
       status: true,
-      message: "Verification email sent",
+      message: "If the email exists and is unverified, a verification link has been sent. Check your inbox.",
     });
   } catch (error) {
     if (error instanceof Error && error.message.includes("ZodError")) {
