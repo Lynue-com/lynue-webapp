@@ -1,7 +1,6 @@
 import "server-only";
 import { type NextRequest, NextResponse } from "next/server";
 import { forgotPasswordSchema } from "../_utils";
-import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,25 +30,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Send verification email
-    try {
-      const { sendEmail } = await import("../../../../lib/email/server");
-      const appUrl = getCanonicalUrl();
-      const resetUrl = `${appUrl}/reset-password?token=`;
-      const email = validated.email!;
-      await sendEmail({
-        to: email,
-        template: "password-reset-email",
-        templateProps: {
-          firstName: email.split("@")[0]!,
-          email,
-          resetUrl,
-        },
-      });
-    } catch (emailError) {
-      console.error("[Auth Email] Failed to send password reset email:", emailError);
-    }
-
+    // The backend owns this flow end-to-end: it creates the reset token AND
+    // sends the reset email with the tokenized link. The token must never
+    // travel through an API response — possession of the emailed link is the
+    // auth factor. This route is only a same-origin proxy; sending a second
+    // email here previously produced a duplicate whose `?token=` was empty.
     // Always return success to prevent email enumeration
     return NextResponse.json({
       status: true,
