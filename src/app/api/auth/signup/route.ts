@@ -1,7 +1,6 @@
 import "server-only";
 import { type NextRequest, NextResponse } from "next/server";
 import { signupSchema } from "../_utils";
-import { getCanonicalUrl } from "@/shared/lib/canonical-url";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,23 +30,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Send verification email
-    try {
-      const { sendEmail } = await import("../../../../lib/email/server");
-      const appUrl = getCanonicalUrl();
-      await sendEmail({
-        to: validated.email,
-        template: "verification-email",
-        templateProps: {
-          firstName: validated.firstName,
-          email: validated.email,
-          verificationUrl: `${appUrl}/verify-email`,
-        },
-      });
-    } catch (emailError) {
-      console.error("[Auth Email] Failed to send verification email:", emailError);
-    }
-
+    // The backend owns this flow end-to-end: it creates the user AND sends
+    // the verification email with the tokenized link (the token must never
+    // travel through an API response — possession of the emailed link is the
+    // auth factor). This route is only a same-origin proxy; sending a second
+    // email here previously produced a duplicate whose verify link had no
+    // `?token=`.
     return NextResponse.json({
       status: true,
       message: "Account created. Please check your email to verify.",

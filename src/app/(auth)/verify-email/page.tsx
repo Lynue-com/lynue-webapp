@@ -17,10 +17,8 @@ export default function VerifyEmailPage() {
 
   useState(() => {
     if (!token) return;
-    // Email is passed from token context (extracted from token)
-    const verifyEmail = token; // Fallback - actual email is validated server-side
     mutate(
-      { token, email: verifyEmail },
+      { token },
       {
         onSuccess: () => toast.success("Email verified successfully"),
         onError: (error) => toast.error(error.message || "Unable to verify email"),

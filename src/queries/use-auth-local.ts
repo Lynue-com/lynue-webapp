@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
- * Local auth operations that route through this Next.js app's
- * Resend-based email system. Data operations are still forwarded
- * to the backend via the proxy route, but email delivery is
- * handled here using React Email + Resend.
+ * Auth operations proxied through this Next.js app's API routes to the
+ * backend. Email delivery (verification, password reset) is owned by the
+ * backend — these routes only forward requests, so the emailed token never
+ * passes through an API response.
  */
 
 export function useSignup() {
@@ -48,7 +48,7 @@ export function useForgotPassword() {
 
 export function useVerifyEmail() {
   return useMutation({
-    mutationFn: async (payload: { token: string; email: string }) => {
+    mutationFn: async (payload: { token: string }) => {
       const res = await fetch("/api/auth/verify-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

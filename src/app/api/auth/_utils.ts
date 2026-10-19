@@ -18,7 +18,6 @@ const forgotPasswordSchema = z.object({
 
 const verifyEmailSchema = z.object({
   token: z.string().min(1, "Verification token is required"),
-  email: z.string().email("Invalid email address"),
 });
 
 const resetPasswordSchema = z.object({

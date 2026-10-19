@@ -30,23 +30,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Send verification email
-    try {
-      const { sendEmail } = await import("../../../../lib/email/server");
-      const email = validated.email!;
-      await sendEmail({
-        to: email,
-        template: "email-resend",
-        templateProps: {
-          firstName: email.split("@")[0]!,
-          email,
-          appName: process.env.NEXT_PUBLIC_APP_NAME || "Vamlar",
-        },
-      });
-    } catch (emailError) {
-      console.error("[Auth Email] Failed to send resend verification email:", emailError);
-    }
-
+    // The backend also sends the fresh verification email (with the
+    // tokenized link) — this route is only a same-origin proxy, so no
+    // second email is sent from here.
     return NextResponse.json({
       status: true,
       message: "Verification email sent",
